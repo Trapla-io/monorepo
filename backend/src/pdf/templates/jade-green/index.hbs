@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Rubik', sans-serif;
+    }
+    h1 {
+      color: {{theme.secondary}};
+      font-size: 54px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    h3 {
+      font-size: 36px;
+      font-weight: 500;
+      text-transform: uppercase;
+      color: {{theme.primary}};
+    }
+    p {
+      font-size: 20px;
+      font-weight: 400;
+    }
+    .white {
+      color: {{theme.text_light}};
+    }
+    .green {
+      color: {{theme.primary}};
+    }
+    .jadegreen-bg-green {
+      background-color: {{theme.primary}};
+    }
+    .section-container {
+      width: 95%;
+      margin: auto;
+    }
+    .cover-img {
+      background-size: cover;
+      height: 600px;
+      background-repeat: no-repeat;
+    }
+    .cover-img div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    .yellow-square {
+      background-color: {{theme.secondary}};
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      border-radius: 3px;
+      font-size: 24px;
+      margin-right: 10px;
+    }
+    section {
+      padding: 20px;
+      width: 890px;
+    }
+    section.single-page {
+      height: 1260px;
+    }
+  </style>
+</head>
+  {{#if sections.cover}}
+    <section class="jadegreen-bg-green single-page">
+      <div class="section-container" style="margin-top: 10%;">
+        <h1>{{ sections.cover.title }}</h1>
+        <div class="cover-img" style="background-image: url({{ sections.cover.cover_image.src }}); margin: 20px 0;"></div>
+        <p class="white">{{ start_date }} - {{ end_date }}</p>
+      </div>
+    </section>
+  {{/if}}
+
+  <section class="single-page">
+    <div class="section-container" style="margin-top: 10%;">
+    <h1 class="green">Sommaire</h1>
+    <div style="margin-left: 10%; margin-top: 5%;">
+      {{#each summary}}
+        <div style="display: flex; justify-content: flex-start; align-items: center; margin-bottom: 20px;">
+          <div class="yellow-square">{{ index }}</div>
+          <h3>{{ title }}</h3>
+        </div>
+      {{/each}}
+    </div>
+  </section>
+
+  {{#if sections.useful-informations}}
+    <section class="jadegreen-bg-green single-page">
+      <div class="section-container" style="margin-top: 10%;">
+        <div class="cover-img" style="height: 800px; background-image: url({{ sections.useful-informations.cover_image.src }});">
+          <div>
+            <h1 class="white">{{ sections.useful-informations.title }}</h1>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-container" style="padding-bottom: 5%;">
+        {{#each sections.useful-informations.items.informations}}
+          <div style="display: flex; flex-direction: {{ direction }}; justify-content: space-between; align-items: flex-start; margin-top: 5%; page-break-after: {{ pageBreak }};">
+            <div style="width: 500px;">
+              <h3 style="margin-bottom: 10px;">{{ title }}</h3>
+              {{{ injectHTML content }}}
+            </div>
+            <img src="{{ image.src }}" style="width: 300px; height: auto;">
+          </div>
+        {{/each}}
+      </div>
+    </section>
+  {{/if}}
+
+  {{#if sections.check-list}}
+    <section class="jadegreen-bg-green single-page">
+      <div class="section-container" style="margin-top: 10%;">
+        <div class="cover-img" style="height: 800px; background-image: url({{ sections.check-list.cover_image.src }});">
+          <div>
+            <h1 class="white">{{ sections.check-list.title }}</h1>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-container" style="padding-bottom: 5%;">
+        <div class="jadegreen-bg-green" style="display: flex; justify-content: center; height: 100px; align-items: center;">
+          <h3 class="white" style="text-transform: uppercase;">à ne pas oublier !</h3>
+        </div>
+        {{#each sections.check-list.items.check_list}}
+          <div style="padding-top: 40px; page-break-after: {{ pageBreak }};">
+            <h3>{{ title }}</h3>
+            <p>{{ content }}</p>
+          </div>
+        {{/each}}
+      </div>
+    </section>
+  {{/if}}
+
+  {{#if sections.itinerary}}
+    <section class="jadegreen-bg-green single-page">
+      <div class="section-container" style="margin-top: 10%;">
+        <div class="cover-img" style="height: 800px; background-image: url({{ sections.itinerary.cover_image.src }});">
+          <div>
+            <h1 class="white">{{ sections.itinerary.title }}</h1>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-container" style="padding-bottom: 5%;">
+        {{#each sections.itinerary.items.steps}}
+          <div style="page-break-after: always;">
+            <div style="width: 100%; height: 350px; background-image: url({{ image.src }}); background-size: cover; background-repeat: no-repeat;"></div>
+            <div>
+              <h1 style="text-transform: uppercase; color: {{theme.primary}}; margin-top: 40px;">{{ title }}</h1>
+              <h5 style="margin-bottom: 10px; color: {{theme.secondary}}; text-transform: uppercase;">{{ subtitle }}</h5>
+              {{{ injectHTML content }}}
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </section>
+  {{/if}}
+
+  {{#if sections.accommodations}}
+    <section class="jadegreen-bg-green single-page">
+      <div class="section-container" style="margin-top: 10%;">
+        <div class="cover-img" style="height: 800px; background-image: url({{ sections.accommodations.cover_image.src }});">
+          <div>
+            <h1 class="white">{{ sections.accommodations.title }}</h1>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-container" style="padding-bottom: 5%;">
+        {{#each sections.accommodations.items.accommodations}}
+          <div style="display: flex; flex-direction: {{ direction }}; justify-content: space-between; align-items: flex-start; margin-top: 5%; page-break-after: {{ pageBreak }};">
+            <img src="{{ image.src }}" style="width: 300px; height: auto;">
+            <div style="width: 500px;">
+              <h3 style="margin-bottom: 10px;">{{ title }}</h3>
+              <div style="font-weight: bold;">{{ price }}€  |  {{arrival_date}} - {{departure_date}}</div>
+              <div style="padding-top: 20px;">
+                {{{ injectHTML description }}}
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </section>
+  {{/if}}
+
+  {{#if sections.map}}
+    <section class="jadegreen-bg-green single-page">
+      <div class="section-container" style="margin-top: 10%;">
+        <div class="cover-img" style="height: 800px; background-image: url({{ sections.map.cover_image.src }});">
+          <div>
+            <h1 class="white">{{ sections.map.title }}</h1>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-container" style="padding-bottom: 5%; page-break-after: always;">
+        <p>{{ sections.map.items.description }}</p>
+        <div style="width: 100%; height: 750px; background-image: url({{ sections.map.items.image.src }}); background-size: cover; background-repeat: no-repeat;"></div>
+        <a target="_blank" href="{{sections.map.items.link}}">{{sections.map.items.link}}</a>
+      </div>
+    </section>
+  {{/if}}
+
+  {{#if sections.transports}}
+    <section class="jadegreen-bg-green single-page">
+      <div class="section-container" style="margin-top: 10%;">
+        <div class="cover-img" style="height: 800px; background-image: url({{ sections.transports.cover_image.src }});">
+          <div>
+            <h1 class="white">{{ sections.transports.title }}</h1>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-container" style="padding-bottom: 5%;">
+        {{#each sections.transports.items.routes}}
+          <div style="margin-top: 5%; page-break-after: {{ pageBreak }};">
+            <h3 style="margin-bottom: 10px;">{{ title }}</h3>
+            <div style="font-style: italic;">{{date}} {{hour}}  |  {{departure_location}} - {{arrival_location}}  |  <span style="font-weight: bold;">{{ price }}€</span></div>
+            <div style="font-weight: bold; color: {{theme.secondary}};">{{company}}</div>
+            <div style="padding-top: 20px;">
+              {{ description }}
+            </div>
+            <a target="_blank" href="{{link}}">{{link}}</a>
+          </div>
+        {{/each}}
+      </div>
+    </section>
+  {{/if}}
+</body>
+</html>

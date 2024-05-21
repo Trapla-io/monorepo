@@ -1,0 +1,49 @@
+// app global css in SCSS form
+@import './fonts/poppins.scss';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1, h2, h3, h4 {
+    font-weight: bold;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    color: $dark;
+}
+
+// Modals
+.q-dialog__inner--minimized .modal {
+    width: 700px;
+    max-width: 80vw;
+
+    &.big {
+        width: 900px;
+    }
+    &.small {
+        width: 600px;
+    }
+    &.fit-screen {
+        width: 80vw;
+        height: 90vh;
+    }
+}
+
+.text-dark {
+    color: $dark !important;
+}
+
+.bg-secondary-1 {
+    background-color: $secondary-1 !important;
+}
+
+a {
+    color: $blue-7;
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
+    }
+}
