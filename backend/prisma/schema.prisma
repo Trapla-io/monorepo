@@ -23,7 +23,7 @@ model User {
   customers Customer[]
   images Image[]
 
-  default_travel_book_template String @default("jade-green")
+  default_travel_book_template String @default("flat-yellow")
   created_at DateTime @default(now())
 }
 
