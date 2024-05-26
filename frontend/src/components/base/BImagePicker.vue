@@ -20,6 +20,12 @@
       @click="openImagePickerModal"
     >
       <QBtn
+        class="absolute-top-right"
+        icon="delete"
+        flat
+        @click.stop="deleteImage"
+      />
+      <QBtn
         icon="edit"
         flat
         label="Modifier"
@@ -53,6 +59,10 @@ export default {
     },
   },
   methods: {
+    deleteImage() {
+      this.localValue = undefined;
+      this.$emit('update:modelValue', undefined);
+    },
     openImagePickerModal() {
       this.$modals.open('ImagePickerModal', {
         props: {
