@@ -5,10 +5,12 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as moment from 'moment';
 import { TemplatesSettings } from './entities/templates.settings';
+import { TravelBook } from '@prisma/client';
+import { CustomersService } from 'src/customers/customers.service';
 
 @Injectable()
 export class PdfService {
-  constructor() {}
+  constructor(private customerService: CustomersService) {}
 
   private compileHandlebar(templateName: string, context: object) {
     try {
@@ -28,8 +30,9 @@ export class PdfService {
     }
   }
 
-  private formatData(data) {
+  private async formatData(data) {
     const sectionsObject = {};
+    const customer = await this.customerService.findOne(data.customer_id);
 
     data.sections.forEach((section) => {
       sectionsObject[section.tag] = section;
@@ -74,6 +77,7 @@ export class PdfService {
       ...data,
       start_date: moment(data.start_date).format('DD/MM/YYYY'),
       end_date: moment(data.end_date).format('DD/MM/YYYY'),
+      customerName: customer ? `${customer.first_name} ${customer.last_name}` : '',
       sections: sectionsObject,
       summary: data.sections.filter(section => section.tag !== 'cover').map((section, index) => ({
         title: section.title,
@@ -82,13 +86,16 @@ export class PdfService {
     };
   }
 
-  async export(data, templateName: string) {
+  async export(travelBook: TravelBook, templateName: string) {
     const browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
-    const html = this.compileHandlebar(templateName, this.formatData(data));
+    const html = this.compileHandlebar(
+      templateName,
+      await this.formatData(travelBook),
+    );
     const options = {
       printBackground: true,
       width: '890px',
@@ -109,8 +116,10 @@ export class PdfService {
   }
 
   async preview(data, templateName: string) {
-    const html = this.compileHandlebar(templateName, this.formatData(data));
-
+    const html = this.compileHandlebar(
+      templateName,
+      await this.formatData(data),
+    );
     return html;
   }
 }

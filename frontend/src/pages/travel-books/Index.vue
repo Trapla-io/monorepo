@@ -119,10 +119,7 @@ export default {
           icon: 'cloud_download',
           timeout: 10000,
         })
-        const response = await this.$api.post(`travel-books/${travelBook.id}/export`, {
-          data: {
-            ...travelBook,
-          }}, { responseType: 'arraybuffer' });
+        const response = await this.$api.post(`travel-books/${travelBook.id}/export`, {}, { responseType: 'arraybuffer' });
 
         const objectUrl = window.URL.createObjectURL(new Blob([response.data]));
 
@@ -140,8 +137,6 @@ export default {
           message: 'Erreur lors de l\'export',
           color: 'negative',
         });
-        closeNotify();
-      } finally {
         closeNotify();
       }
     },

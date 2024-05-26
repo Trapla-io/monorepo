@@ -44,8 +44,16 @@ export class CustomersService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} customer`;
+  async findOne(id: number) {
+    try {
+      return await this.prisma.customer.findUnique({
+        where: {
+          id: id,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
   update(user: User, id: number, updateCustomerDto: UpdateCustomerDto) {

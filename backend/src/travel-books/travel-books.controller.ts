@@ -50,12 +50,8 @@ export class TravelBooksController {
   }
 
   @Post(':id/export')
-  export(
-    @GetUser() user: User,
-    @Param('id') id: string,
-    @Body('data') data: object,
-  ) {
-    return this.travelBooksService.export(+id, data, user);
+  export(@GetUser() user: User, @Param('id') id: string) {
+    return this.travelBooksService.export(+id, user);
   }
 
   @Post(':id/preview')

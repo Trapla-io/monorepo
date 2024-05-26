@@ -86,9 +86,14 @@ export class TravelBooksService {
     return `This action removes a #${id} travelBook`;
   }
 
-  async export(id: number, data: object, user: User) {
+  async export(id: number, user: User) {
+    const travelBook = await this.prisma.travelBook.findUnique({
+      where: {
+        id,
+      },
+    });
     const pdf = await this.pdfService.export(
-      data,
+      travelBook,
       user.default_travel_book_template,
     );
 
