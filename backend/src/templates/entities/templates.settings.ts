@@ -15,14 +15,6 @@ const TemplatesSettings = {
       left: '0px',
     },
   },
-  'flat-yellow-test': {
-    margin: {
-      top: '50px',
-      right: '0px',
-      bottom: '0px',
-      left: '0px',
-    },
-  },
 };
 
 export { TemplatesSettings };
