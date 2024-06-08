@@ -1,0 +1,25 @@
+<section class="single-page">
+      <div class="page-header">
+        {{ data.coverTitle }}
+      </div>
+      <div class="page-container">
+        <div class="cover-img" style="background-image: url({{ data.cover_image.src }}); margin: 50px 0;"></div>
+        <h1>{{data.title}}</h1>
+      </div>
+    </section>
+
+    <section>
+      <div class="page-header">
+        {{ data.coverTitle }}
+      </div>
+      <div class="page-container">
+        <div style="margin-top: 80px;">
+        {{#each data.checkList}}
+          <div style="padding-top: 40px; page-break-after: {{ pageBreak }};">
+            <h2 style="color: {{../theme.primary}};">{{ title }}</h2>
+            <p style="margin-left: 10px;">{{ content }}</p>
+          </div>
+        {{/each}}
+        </div>
+      </div>
+    </section>

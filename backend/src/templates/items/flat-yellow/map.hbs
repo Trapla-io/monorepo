@@ -1,0 +1,22 @@
+<section class="single-page">
+      <div class="page-header">
+        {{ data.coverTitle }}
+      </div>
+      <div class="page-container">
+        <div class="cover-img" style="background-image: url({{ data.cover_image.src }}); margin: 50px 0;"></div>
+        <h1>{{data.title}}</h1>
+      </div>
+    </section>
+
+    <section>
+      <div class="page-header">
+        {{ data.coverTitle }}
+      </div>
+      <div class="page-container">
+        <div style="margin-top: 80px; padding-bottom: 5%; page-break-after: always;">
+          <p>{{ data.items.description }}</p>
+          <div style="width: 100%; height: 750px; border-radius: 10px; background-image: url({{ data.items.image.src }}); background-size: cover; background-repeat: no-repeat;"></div>
+          <a target="_blank" href="{{data.items.link}}">{{data.items.link}}</a>
+        </div>
+      </div>
+    </section>

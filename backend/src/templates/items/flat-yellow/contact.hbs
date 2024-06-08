@@ -1,0 +1,25 @@
+<section>
+      <div class="page-header">
+        {{ data.coverTitle }}
+      </div>
+      <div class="page-container">
+        <h1 style="text-align: center; margin-top: 30%; margin-bottom: 80px;">{{data.title}}</h1>
+        <div style="display: flex; justify-content: center; align-items: center;">
+          <img style="height: 150px; width: 150px; border-radius: 50%;" src="{{data.items.image.src}}">
+          <div style="margin-left: 50px;">
+            <div style="display: flex; margin-bottom: 20px;">
+              <span class="material-icons">email</span>
+              <p>{{data.items.email}}</p>
+            </div>
+            <div style="display: flex; margin-bottom: 20px;">
+              <span class="material-icons">call</span>
+              <p>{{data.items.phone}}</p>
+            </div>
+            <div style="display: flex; margin-bottom: 20px;">
+              <span class="material-icons">link</span>
+              <p><a href="{{data.items.website}}" target="_blank">{{data.items.website}}</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>

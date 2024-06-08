@@ -1,0 +1,29 @@
+<section class="single-page">
+      <div class="page-header">
+        {{ data.coverTitle }}
+      </div>
+      <div class="page-container">
+        <div class="cover-img" style="background-image: url({{ data.cover_image.src }}); margin: 50px 0;"></div>
+        <h1>{{data.title}}</h1>
+      </div>
+    </section>
+
+    <section>
+      <div class="page-header">
+        {{ data.coverTitle }}
+      </div>
+      <div class="page-container">
+        {{#each data.items.steps}}
+          <div style="margin-top: 80px; page-break-after: always;">
+            <div style="width: 100%; height: 350px; background-image: url({{ image.src }}); background-size: cover; background-repeat: no-repeat; border-radius: 6px 6px 6px 6px;"></div>
+            <div>
+              <h1 style="text-transform: uppercase; color: {{theme.primary}}; margin-top: 40px;">{{ title }}</h1>
+              <h5 style="margin-bottom: 10px; color: {{theme.secondary}}; text-transform: uppercase;">{{ subtitle }}</h5>
+              <p>
+                {{{ injectHTML content }}}
+              </p>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </section>

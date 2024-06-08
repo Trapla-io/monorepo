@@ -2,7 +2,7 @@ import { Injectable, StreamableFile } from '@nestjs/common';
 import { CreateTravelBookDto } from './dto/create-travel-book.dto';
 import { UpdateTravelBookDto } from './dto/update-travel-book.dto';
 import { PdfService } from 'src/pdf/pdf.service';
-import { Templates } from 'src/pdf/entities/templates.enum';
+import { Templates } from 'src/templates/entities/templates.enum';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '@prisma/client';
 
@@ -91,6 +91,9 @@ export class TravelBooksService {
       where: {
         id,
       },
+      include: {
+        customer: true,
+      },
     });
     const pdf = await this.pdfService.export(
       travelBook,
@@ -100,10 +103,21 @@ export class TravelBooksService {
     return new StreamableFile(pdf, { type: 'application/pdf' });
   }
 
-  async preview(id: number, data: object, user: User) {
-    return await this.pdfService.preview(
-      data,
-      user.default_travel_book_template,
-    );
+  async preview(id: number, data, user: User) {
+    try {
+      const customer = await this.prisma.customer.findUnique({
+        where: {
+          id: data.customer_id,
+        },
+      });
+
+      data.customer = customer;
+      return await this.pdfService.preview(
+        data,
+        user.default_travel_book_template,
+      );
+    } catch (error) {
+      throw error;
+    }
   }
 }
