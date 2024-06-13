@@ -2,7 +2,6 @@ import { Injectable, StreamableFile } from '@nestjs/common';
 import { CreateTravelBookDto } from './dto/create-travel-book.dto';
 import { UpdateTravelBookDto } from './dto/update-travel-book.dto';
 import { PdfService } from 'src/pdf/pdf.service';
-import { Templates } from 'src/templates/entities/templates.enum';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '@prisma/client';
 
@@ -30,7 +29,6 @@ export class TravelBooksService {
         data: {
           title: dto.title,
           destination: dto.destination,
-          sections: dto.sections,
           start_date: dto.start_date,
           end_date: dto.end_date,
           theme: DEFAULT_THEME,
@@ -39,6 +37,9 @@ export class TravelBooksService {
             connect: {
               id: user.id,
             },
+          },
+          sections: {
+            create: dto.sections,
           },
         },
       });
@@ -53,6 +54,10 @@ export class TravelBooksService {
       const travelBooks = await this.prisma.travelBook.findMany({
         where: {
           user_id: user.id,
+        },
+        include: {
+          customer: true,
+          sections: true,
         },
       });
       return travelBooks;
@@ -74,6 +79,18 @@ export class TravelBooksService {
         },
         data: {
           ...dto,
+          sections: {
+            updateMany: [
+              ...dto.sections.map((section) => ({
+                where: {
+                  id: section.id,
+                },
+                data: {
+                  ...section,
+                },
+              })),
+            ],
+          },
         },
       });
       return travelBook;
@@ -93,6 +110,7 @@ export class TravelBooksService {
       },
       include: {
         customer: true,
+        sections: true,
       },
     });
     const pdf = await this.pdfService.export(

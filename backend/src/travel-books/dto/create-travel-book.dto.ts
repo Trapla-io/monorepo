@@ -1,4 +1,13 @@
-import { IsArray, IsDateString, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { Type } from 'class-transformer';
+import {
+  IsDateString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { SectionDto } from './section.dto';
 
 export class CreateTravelBookDto {
   @IsString()
@@ -9,9 +18,9 @@ export class CreateTravelBookDto {
   @IsOptional()
   destination: string;
 
-  @IsArray()
-  @IsOptional()
-  sections: Array<object>;
+  @ValidateNested()
+  @Type(() => SectionDto)
+  sections: SectionDto[];
 
   @IsDateString()
   @IsOptional()

@@ -90,10 +90,10 @@ export default {
     ...mapStores(useTravelBooksStore),
     draggableSections: {
       get() {
-        return this.travelBooksStore.currentTravelBook.sections;
+        return this.sortSections(this.travelBooksStore.currentTravelBook.sections);
       },
       set(value) {
-        console.log(value);
+        value = this.reorderSections(value);
         this.travelBooksStore.currentTravelBook.sections = value;
       },
     },
@@ -118,6 +118,15 @@ export default {
     this.activeSection = this.travelBooksStore.currentTravelBook.sections[0];
   },
   methods: {
+    reorderSections(sections) {
+      return sections.map((section, index) => {
+        section.position = index;
+        return section;
+      });
+    },
+    sortSections(sections) {
+      return sections.sort((a, b) => a.position - b.position);
+    },
     displayActions(sectionTag) {
       if (this.isDragging) return false;
       return this.hoveredSection === sectionTag;

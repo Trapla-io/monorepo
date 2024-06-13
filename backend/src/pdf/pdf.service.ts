@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import puppeteer from 'puppeteer';
 import { TemplatesSettings } from '../templates/entities/templates.settings';
 import { TemplateService } from 'src/templates/template.service';
-import { TravelBookWithCustomer } from 'src/prisma/types/travel-books.types';
+import { TravelBookWithCustomerAndSections } from 'src/prisma/types/travel-books.types';
 
 @Injectable()
 export class PdfService {
   constructor(private templateService: TemplateService) {}
 
-  async export(travelBook: TravelBookWithCustomer, templateName: string) {
+  async export(travelBook: TravelBookWithCustomerAndSections, templateName: string) {
     const browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],

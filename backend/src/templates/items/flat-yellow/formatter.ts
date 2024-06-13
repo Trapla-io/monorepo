@@ -1,9 +1,9 @@
-import { TravelBookWithCustomer } from 'src/prisma/types/travel-books.types';
+import { TravelBookWithCustomerAndSections } from 'src/prisma/types/travel-books.types';
 import { AbstractTemplateFormatter } from 'src/templates/builder/abstract.template-formatter';
 import * as moment from 'moment';
 
 export class FlatYellowFormatter extends AbstractTemplateFormatter {
-  constructor(travelBook: TravelBookWithCustomer) {
+  constructor(travelBook: TravelBookWithCustomerAndSections) {
     super(travelBook);
 
     const cover: any = travelBook.sections.find(
