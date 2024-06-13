@@ -32,7 +32,9 @@ model TravelBook {
   
   title     String
   destination String?
+
   sections  Json[]
+  new_sections  Section[]
 
   theme     Json?
 
@@ -44,6 +46,25 @@ model TravelBook {
 
   customer_id Int?
   user_id   Int
+
+  created_at DateTime @default(now())
+}
+
+model Section {
+  id        Int      @default(autoincrement()) @id
+
+  title     String
+  label     String
+  tag       String
+
+  icon      String
+
+  items     Json
+
+  cover_image Json?
+
+  travel_book TravelBook @relation(fields: [travel_book_id], references: [id])
+  travel_book_id Int
 
   created_at DateTime @default(now())
 }
