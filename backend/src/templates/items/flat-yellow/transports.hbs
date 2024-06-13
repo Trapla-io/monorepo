@@ -1,0 +1,33 @@
+<section class="single-page">
+      <div class="page-header">
+        {{ data.coverTitle }}
+      </div>
+      <div class="page-container">
+        <div class="cover-img" style="background-image: url({{ data.cover_image.src }}); margin: 50px 0;"></div>
+        <h1>{{data.title}}</h1>
+      </div>
+    </section>
+
+    <section>
+      <div class="page-header">
+        {{ data.coverTitle }}
+      </div>
+      <div class="page-container">
+        {{#each data.routes}}
+          <div style="margin-top: 80px; page-break-after: {{ pageBreak }}; overflow: hidden;">
+            <div style="display: flex; align-items: center;">
+              <h2 style="color: {{../theme.primary}};">{{title}}</h2>
+              <div class="price-oval" style="margin-left: 15px;">{{price}} €</div>
+            </div>
+            <span style="font-weight: bold;">{{company}}</span>
+            <div style="font-weight: bold; display: flex; align-items: center;">
+              <span>{{departure_location}} - {{departure_date}} - {{departure_hour}}</span>
+              <span class="material-icons">east</span>
+              <span>{{arrival_location}} - {{arrival_date}} - {{arrival_hour}}</span>
+            </div>
+            <p>{{{ injectHTML description }}}</p>
+            <a href="{{link}}" target="_blank" rel="noopener noreferrer">{{link}}</a>
+          </div>
+        {{/each}}
+      </div>
+    </section>

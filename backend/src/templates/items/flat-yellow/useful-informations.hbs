@@ -1,0 +1,33 @@
+<section class="single-page">
+      <div class="page-header">
+        {{ data.coverTitle }}
+      </div>
+      <div class="page-container">
+        <div class="cover-img" style="background-image: url({{ data.cover_image.src }}); margin: 50px 0;"></div>
+        <h1>{{data.title}}</h1>
+      </div>
+    </section>
+
+    <section>
+      <div class="page-header">
+        {{ data.coverTitle }}
+      </div>
+      <div class="page-container">
+        <div style="margin-top: 80px;">
+        {{#each data.informations}}
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 5%; page-break-after: {{ pageBreak }};">
+            {{#if image}}
+              <img src="{{ image.src }}" style="width: 35%; height: auto; border-radius: 10px 1px 10px 10px;">
+            {{/if}}
+            <div style="width: 60%;">
+              <div style="height: 8px; background-color: {{../theme.primary}}; border-radius: 0 10px 10px 0"></div>
+              <h2 style="margin-bottom: 10px; color: {{../theme.secondary}};">{{ title }}</h2>
+              <p>
+                {{{ injectHTML content }}}
+              </p>
+            </div>
+          </div>
+        {{/each}}
+        </div>
+      </div>
+    </section>

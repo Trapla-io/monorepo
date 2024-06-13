@@ -9,22 +9,15 @@
         v-model="computedTitle"
       />
 
+      <div class="flex items-center q-mt-md">
+        <p class="text-subtitle1 q-ma-none text-grey-6">Afficher le sommaire :</p>
+        <QCheckbox v-model="computedShowSummary" />
+      </div>
+
       <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Image de couverture</p>
       <BImagePicker
         v-model="computedImage"
       />
-      <!-- <QUploader
-        class="full-width"
-        :ref="'uploader'"
-        label="Importez une image"
-        text-color="white"
-        accept=".jpg, image/*"
-        @added="computedImage = $event"
-        @removed="computedImage = [null]"
-        hide-upload-btn
-        bordered
-        flat
-      /> -->
     </div>
   </SectionEditLayout>
 </template>
@@ -32,10 +25,11 @@
 import SectionEditLayout from 'src/layouts/SectionEditLayout.vue';
 import { useTravelBooksStore } from 'src/stores/travel-books.store';
 import { mapStores } from 'pinia';
+import { QCheckbox } from 'quasar';
 
 export default {
   name: 'SectionCoverEdit',
-  components: { SectionEditLayout },
+  components: { SectionEditLayout, QCheckbox },
   props: {
     section: {
       type: Object,
@@ -46,6 +40,7 @@ export default {
     return {
       title: this.section.title,
       image: this.section.cover_image,
+      showSummary: this.section.items.show_summary,
     };
   },
   computed: {
@@ -68,21 +63,23 @@ export default {
         this.updateSection();
       },
     },
-  },
-  mounted() {
-    // this.setImageInUploader();
+    computedShowSummary: {
+      get() {
+        return this.showSummary;
+      },
+      set(value) {
+        this.showSummary = value;
+        this.updateSection();
+      },
+    },
   },
   methods: {
-    setImageInUploader() {
-      if (!this.image) return;
-
-      this.$refs.uploader.addFiles([this.image]);
-    },
     async updateSection() {
       await this.travelBooksStore.updateCurrentTravelBookSection({
         ...this.section,
         items: {
           ...this.section.items,
+          show_summary: this.showSummary,
         },
         title: this.title,
         cover_image: this.image,
