@@ -1,9 +1,11 @@
-import { Injectable, StreamableFile } from '@nestjs/common';
+import { BadRequestException, Injectable, StreamableFile, UnauthorizedException } from '@nestjs/common';
 import { CreateTravelBookDto } from './dto/create-travel-book.dto';
 import { UpdateTravelBookDto } from './dto/update-travel-book.dto';
 import { PdfService } from 'src/pdf/pdf.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '@prisma/client';
+import { CreateSectionDto } from './dto/create-section.dto';
+import { SECTIONS } from '../helpers/travel-book-sections.helper';
 
 const DEFAULT_THEME = {
   primary: '#0E5450',
@@ -134,6 +136,66 @@ export class TravelBooksService {
         data,
         user.default_travel_book_template,
       );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async addSection(id: number, dto: CreateSectionDto, user: User) {
+    try {
+      const sectionData = SECTIONS.find((section) => section.tag === dto.tag);
+      const travelBook = await this.prisma.travelBook.findUnique({
+        where: {
+          id,
+          user_id: user.id,
+        },
+      });
+
+      if (!travelBook) {
+        throw new UnauthorizedException(
+          'User does not have access to this travel book.',
+        );
+      }
+      if (!sectionData) {
+        throw new BadRequestException(`Section tag ${dto.tag} is not valid.`);
+      }
+
+      return await this.prisma.section.create({
+        data: {
+          ...sectionData,
+          travel_book: {
+            connect: {
+              id,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async removeSection(id: number, sectionId: number, user: User) {
+    try {
+      const travelBook = await this.prisma.travelBook.findUnique({
+        where: {
+          id,
+          user_id: user.id,
+        },
+      });
+
+      if (!travelBook) {
+        throw new UnauthorizedException(
+          'User does not have access to this travel book.',
+        );
+      }
+
+      await this.prisma.section.delete({
+        where: {
+          id: sectionId,
+        },
+      });
+      return 'Section deleted successfully.';
     } catch (error) {
       throw error;
     }

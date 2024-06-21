@@ -1,4 +1,3 @@
-import { TravelBook } from '@prisma/client';
 import { Sections } from '../entities/sections';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -22,8 +21,11 @@ export class TemplateBuilder {
 
   public async perform() {
     let sectionsHTML = '';
+    const orderedSections = this.travelBook.sections.sort(
+      (a, b) => a.position - b.position,
+    );
 
-    this.travelBook.sections.forEach((section) => {
+    orderedSections.forEach((section) => {
       sectionsHTML += this.compileSection(section);
     });
 
