@@ -7,7 +7,7 @@ const SECTIONS_TEMPLATES = [
     cover_image: null,
     items: {
       title: "",
-      showSummary: true,
+      show_summary: true,
     }
   },
   {

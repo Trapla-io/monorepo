@@ -17,30 +17,31 @@ export const useTravelBooksStore = defineStore('travelBooks', {
         ...this.travelBooks.find(travelBook => travelBook.id === +travelBookId)
       }
     },
-    getCurrentTravelBookSection(sectionTag) {
-      return this.currentTravelBook.sections.find((section) => section.tag === sectionTag);
+    getCurrentTravelBookSection(sectionId) {
+      return this.currentTravelBook.sections.find((section) => section.id === sectionId);
     },
     async addCurrentTravelBookSection(sectionTag) {
-      const sectionTemplate = SECTIONS_TEMPLATES.find((sectionTemplate) => sectionTemplate.tag === sectionTag);
+      const response = await api.post(`/travel-books/${this.currentTravelBook.id}/sections`, {
+        tag: sectionTag,
+      });
 
-      this.currentTravelBook.sections.push(sectionTemplate);
+      this.currentTravelBook.sections.push(response.data);
     },
     async updateCurrentTravelBookSection(updatedSection) {
       this.currentTravelBook = {
         ...this.currentTravelBook,
         sections: this.currentTravelBook.sections.map((section) => {
-          if (section.tag === updatedSection.tag) {
+          if (section.id === updatedSection.id) {
             return updatedSection;
           }
           return section;
         }),
       };
     },
-    async removeCurrentTravelBookSection(sectionTag) {
-      this.currentTravelBook = {
-        ...this.currentTravelBook,
-        sections: this.currentTravelBook.sections.filter((section) => section.tag !== sectionTag),
-      };
+    async removeCurrentTravelBookSection(sectionId) {
+      await api.delete(`/travel-books/${this.currentTravelBook.id}/sections/${sectionId}`);
+
+      this.currentTravelBook.sections = this.currentTravelBook.sections.filter((section) => section.id !== sectionId);
     },
     async getAll() {
       try {
@@ -73,7 +74,7 @@ export const useTravelBooksStore = defineStore('travelBooks', {
     },
     async create(sectionsNames, title) {
       try {
-        const response =  await api.post('/travel-books', {
+        const response = await api.post('/travel-books', {
           title,
           sections: sectionsNames.map((sectionName) => {
             const sectionTemplate = SECTIONS_TEMPLATES.find((sectionTemplate) => sectionTemplate.tag === sectionName);

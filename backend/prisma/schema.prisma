@@ -33,8 +33,7 @@ model TravelBook {
   title     String
   destination String?
 
-  sections  Json[]
-  new_sections  Section[]
+  sections  Section[]
 
   theme     Json?
 
@@ -62,6 +61,8 @@ model Section {
   items     Json
 
   cover_image Json?
+
+  position Int @default(0)
 
   travel_book TravelBook @relation(fields: [travel_book_id], references: [id])
   travel_book_id Int

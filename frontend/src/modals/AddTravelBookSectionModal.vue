@@ -57,9 +57,6 @@ export default {
       return this.sections.filter(s => s.selected).length === 0;
     }
   },
-  mounted() {
-    this.sections = this.sections.filter(s => !this.travelBooksStore.currentTravelBook.sections.map(s => s.tag).includes(s.tag));
-  },
   methods: {
     async addSection() {
       this.loading = true;

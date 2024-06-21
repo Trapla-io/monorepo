@@ -1,10 +1,9 @@
-import { TravelBook } from '@prisma/client';
 import { Sections } from '../entities/sections';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { AbstractTemplateFormatter } from './abstract.template-formatter';
 import { TemplateFormatterFactory } from './template-formatter.factory';
-import { TravelBookWithCustomer } from 'src/prisma/types/travel-books.types';
+import { TravelBookWithCustomerAndSections } from 'src/prisma/types/travel-books.types';
 import Handlebars from 'handlebars';
 
 class TemplateFile {
@@ -13,7 +12,7 @@ class TemplateFile {
 }
 
 export class TemplateBuilder {
-  constructor(name: string, travelBook: TravelBookWithCustomer) {
+  constructor(name: string, travelBook: TravelBookWithCustomerAndSections) {
     this.name = name;
     this.travelBook = travelBook;
     this.formatter = TemplateFormatterFactory.create(name, travelBook);
@@ -22,8 +21,11 @@ export class TemplateBuilder {
 
   public async perform() {
     let sectionsHTML = '';
+    const orderedSections = this.travelBook.sections.sort(
+      (a, b) => a.position - b.position,
+    );
 
-    this.travelBook.sections.forEach((section) => {
+    orderedSections.forEach((section) => {
       sectionsHTML += this.compileSection(section);
     });
 
@@ -80,7 +82,7 @@ export class TemplateBuilder {
   }
 
   private name: string;
-  private travelBook: TravelBook;
+  private travelBook: TravelBookWithCustomerAndSections;
   private files: TemplateFile[] = [];
   private formatter: AbstractTemplateFormatter;
 }

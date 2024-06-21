@@ -1,10 +1,11 @@
-import { Injectable, StreamableFile } from '@nestjs/common';
+import { BadRequestException, Injectable, StreamableFile, UnauthorizedException } from '@nestjs/common';
 import { CreateTravelBookDto } from './dto/create-travel-book.dto';
 import { UpdateTravelBookDto } from './dto/update-travel-book.dto';
 import { PdfService } from 'src/pdf/pdf.service';
-import { Templates } from 'src/templates/entities/templates.enum';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '@prisma/client';
+import { CreateSectionDto } from './dto/create-section.dto';
+import { SECTIONS } from '../helpers/travel-book-sections.helper';
 
 const DEFAULT_THEME = {
   primary: '#0E5450',
@@ -30,7 +31,6 @@ export class TravelBooksService {
         data: {
           title: dto.title,
           destination: dto.destination,
-          sections: dto.sections,
           start_date: dto.start_date,
           end_date: dto.end_date,
           theme: DEFAULT_THEME,
@@ -39,6 +39,9 @@ export class TravelBooksService {
             connect: {
               id: user.id,
             },
+          },
+          sections: {
+            create: dto.sections,
           },
         },
       });
@@ -53,6 +56,10 @@ export class TravelBooksService {
       const travelBooks = await this.prisma.travelBook.findMany({
         where: {
           user_id: user.id,
+        },
+        include: {
+          customer: true,
+          sections: true,
         },
       });
       return travelBooks;
@@ -74,6 +81,18 @@ export class TravelBooksService {
         },
         data: {
           ...dto,
+          sections: {
+            updateMany: [
+              ...dto.sections.map((section) => ({
+                where: {
+                  id: section.id,
+                },
+                data: {
+                  ...section,
+                },
+              })),
+            ],
+          },
         },
       });
       return travelBook;
@@ -93,6 +112,7 @@ export class TravelBooksService {
       },
       include: {
         customer: true,
+        sections: true,
       },
     });
     const pdf = await this.pdfService.export(
@@ -116,6 +136,66 @@ export class TravelBooksService {
         data,
         user.default_travel_book_template,
       );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async addSection(id: number, dto: CreateSectionDto, user: User) {
+    try {
+      const sectionData = SECTIONS.find((section) => section.tag === dto.tag);
+      const travelBook = await this.prisma.travelBook.findUnique({
+        where: {
+          id,
+          user_id: user.id,
+        },
+      });
+
+      if (!travelBook) {
+        throw new UnauthorizedException(
+          'User does not have access to this travel book.',
+        );
+      }
+      if (!sectionData) {
+        throw new BadRequestException(`Section tag ${dto.tag} is not valid.`);
+      }
+
+      return await this.prisma.section.create({
+        data: {
+          ...sectionData,
+          travel_book: {
+            connect: {
+              id,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async removeSection(id: number, sectionId: number, user: User) {
+    try {
+      const travelBook = await this.prisma.travelBook.findUnique({
+        where: {
+          id,
+          user_id: user.id,
+        },
+      });
+
+      if (!travelBook) {
+        throw new UnauthorizedException(
+          'User does not have access to this travel book.',
+        );
+      }
+
+      await this.prisma.section.delete({
+        where: {
+          id: sectionId,
+        },
+      });
+      return 'Section deleted successfully.';
     } catch (error) {
       throw error;
     }

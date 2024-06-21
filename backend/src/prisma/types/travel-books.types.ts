@@ -1,11 +1,13 @@
 import { Prisma } from '@prisma/client';
 
-const TravelBookWithCustomer = Prisma.validator<Prisma.TravelBookDefaultArgs>()(
-  {
-    include: { customer: true },
-  },
-);
+const TravelBookWithCustomerAndSections =
+  Prisma.validator<Prisma.TravelBookDefaultArgs>()({
+    include: {
+      customer: true,
+      sections: true,
+    },
+  });
 
-export type TravelBookWithCustomer = Prisma.TravelBookGetPayload<
-  typeof TravelBookWithCustomer
+export type TravelBookWithCustomerAndSections = Prisma.TravelBookGetPayload<
+  typeof TravelBookWithCustomerAndSections
 >;

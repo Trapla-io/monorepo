@@ -1,7 +1,7 @@
-import { TravelBookWithCustomer } from 'src/prisma/types/travel-books.types';
+import { TravelBookWithCustomerAndSections } from 'src/prisma/types/travel-books.types';
 
 export abstract class AbstractTemplateFormatter {
-  constructor(travelBook: TravelBookWithCustomer) {
+  constructor(travelBook: TravelBookWithCustomerAndSections) {
     this.travelBook = travelBook;
   }
 
@@ -35,5 +35,5 @@ export abstract class AbstractTemplateFormatter {
     accommodations: this.formatAccommodations.bind(this),
     map: this.formatMap.bind(this),
   };
-  protected travelBook: TravelBookWithCustomer;
+  protected travelBook: TravelBookWithCustomerAndSections;
 }
