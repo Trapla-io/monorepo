@@ -15,8 +15,10 @@
       <div class="page-container">
         <div style="margin-top: 80px; padding-bottom: 5%; page-break-after: always;">
           <p>{{ data.items.description }}</p>
-          <div style="width: 100%; height: 750px; border-radius: 10px; background-image: url({{ data.items.image.src }}); background-size: cover; background-repeat: no-repeat;"></div>
-          <a target="_blank" href="{{data.items.link}}">{{data.items.link}}</a>
+          <a target="_blank" href="{{data.items.link}}">
+            <div style="width: 100%; height: 750px; border-radius: 10px; background-image: url({{ data.items.image.src }}); background-size: cover; background-repeat: no-repeat;"></div>
+          </a>
+          <a target="_blank" style="text-decoration: underline;" href="{{data.items.link}}">Consulter la carte.</a>
         </div>
       </div>
     </section>
