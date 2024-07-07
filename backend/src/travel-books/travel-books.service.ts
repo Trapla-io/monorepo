@@ -33,7 +33,7 @@ export class TravelBooksService {
           destination: dto.destination,
           start_date: dto.start_date,
           end_date: dto.end_date,
-          theme: DEFAULT_THEME,
+          theme: dto.theme || DEFAULT_THEME,
           ...(dto.customer_id ? customer : {}),
           user: {
             connect: {
@@ -43,6 +43,10 @@ export class TravelBooksService {
           sections: {
             create: dto.sections,
           },
+        },
+        include: {
+          customer: true,
+          sections: true,
         },
       });
       return travelBook;
@@ -101,8 +105,18 @@ export class TravelBooksService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} travelBook`;
+  async remove(id: number, user: User) {
+    try {
+      await this.prisma.travelBook.delete({
+        where: {
+          id,
+          user_id: user.id,
+        },
+      });
+      return 'Travel book deleted successfully.';
+    } catch (error) {
+      throw error;
+    }
   }
 
   async export(id: number, user: User) {
@@ -125,13 +139,14 @@ export class TravelBooksService {
 
   async preview(id: number, data, user: User) {
     try {
-      const customer = await this.prisma.customer.findUnique({
-        where: {
-          id: data.customer_id,
-        },
-      });
+      if (data.customer_id) {
+        data.customer = await this.prisma.customer.findUnique({
+          where: {
+            id: data.customer_id,
+          },
+        });
+      }
 
-      data.customer = customer;
       return await this.pdfService.preview(
         data,
         user.default_travel_book_template,

@@ -29,10 +29,60 @@
           class="cursor-pointer"
           @click="openEditTravelBook(travelBook)"
         >
-          <QCardSection>
-            <p class="text-subtitle2">{{ travelBook.title }}</p>
-            <p class="text-caption">{{ travelBook.destination }}</p>
-            <p class="text-caption">{{ datesString(travelBook) }}</p>
+          <QCardSection class="row justify-between">
+            <div>
+              <p class="text-subtitle2">{{ travelBook.title }}</p>
+              <p class="text-caption">{{ travelBook.destination }}</p>
+              <p class="text-caption">{{ datesString(travelBook) }}</p>
+            </div>
+            <div>
+              <QIcon
+                class="q-pa-sm"
+                name="more_vert"
+                size="xs"
+                @click.stop
+              >
+                <QMenu
+                  anchor="top right"
+                  self="top left"
+                >
+                  <QList>
+                    <QItem 
+                      clickable
+                      v-close-popup
+                      @click="duplicateTravelBook(travelBook)"
+                    >
+                      <QItemSection side>
+                        <QIcon
+                          name="content_copy"
+                          size="xs"
+                          color="dark"
+                        />
+                      </QItemSection>
+                      <QItemSection>
+                        Dupliquer
+                      </QItemSection>
+                    </QItem>
+                    <QItem 
+                      clickable
+                      v-close-popup
+                      @click="startDeleteTravelBook(travelBook)"
+                    >
+                      <QItemSection side>
+                        <QIcon
+                          name="delete"
+                          size="xs"
+                          color="negative"
+                        />
+                      </QItemSection>
+                      <QItemSection class="text-negative">
+                        Supprimer
+                      </QItemSection>
+                    </QItem>
+                  </QList>
+                </QMenu>
+              </QIcon>
+            </div>
           </QCardSection>
 
           <QCardActions align="right">
@@ -57,13 +107,14 @@
   </QPage>
 </template>
 <script>
-import { QBtn, QPage, date } from 'quasar';
+import { QBtn, QIcon, QItem, QItemSection, QList, QMenu, QPage, date } from 'quasar';
 import { useTravelBooksStore } from 'src/stores/travel-books.store';
 import { mapStores } from 'pinia';
 import { useCustomersStore } from 'src/stores/customers.store';
 
 export default {
   name: 'TravelBooksIndex',
+  components: { QBtn, QPage, QIcon, QMenu, QItem, QList, QItemSection },
   data() {
     return {
       filters: {
@@ -109,6 +160,47 @@ export default {
     openEditTravelBook(travelBook) {
       this.$router.push({ name: 'TravelBooksEdit', params: { id: travelBook.id } });
     },
+    async duplicateTravelBook(travelBook) {
+      try {
+        const response = await this.$api.post('travel-books/', {
+          ...travelBook,
+          title: `${travelBook.title} (copie)`,
+        });
+        this.travelBooksStore.getAll();
+        this.$q.notify({
+          message: 'Carnet de voyage dupliqué',
+          color: 'positive',
+        });
+      } catch (error) {
+        this.$q.notify({
+          message: 'Erreur lors de la duplication',
+          color: 'negative',
+        });
+      }
+    },
+    startDeleteTravelBook(travelBook) {
+      this.$q.dialog({
+        title: 'Supprimer un carnet de voyage',
+        message: 'Voulez-vous vraiment supprimer ce carnet de voyage ? cette action est irréversible et toutes les données associées seront perdues.',
+        persistent: true,
+        cancel: true,
+      }).onOk(() => this.deleteTravelBook(travelBook));
+    },
+    async deleteTravelBook(travelBook) {
+      try {
+        await this.$api.delete(`travel-books/${travelBook.id}`);
+        this.travelBooksStore.getAll();
+        this.$q.notify({
+          message: 'Carnet de voyage supprimé',
+          color: 'positive',
+        });
+      } catch (error) {
+        this.$q.notify({
+          message: 'Erreur lors de la suppression',
+          color: 'negative',
+        });
+      }
+    },
     async exportTravelBook(travelBook) {
       try {
         const closeNotify = this.$q.notify({
@@ -141,7 +233,6 @@ export default {
       }
     },
   },
-  components: { QBtn, QPage }
 }
 </script>
 

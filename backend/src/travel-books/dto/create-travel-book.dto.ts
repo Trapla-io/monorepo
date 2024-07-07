@@ -3,12 +3,12 @@ import {
   IsDateString,
   IsNotEmpty,
   IsNumber,
+  IsObject,
   IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { SectionDto } from './section.dto';
-
+import { CreateSectionDto } from './create-section.dto';
 export class CreateTravelBookDto {
   @IsString()
   @IsNotEmpty()
@@ -18,9 +18,13 @@ export class CreateTravelBookDto {
   @IsOptional()
   destination: string;
 
+  @IsObject()
+  @IsOptional()
+  theme: object;
+
   @ValidateNested()
-  @Type(() => SectionDto)
-  sections: SectionDto[];
+  @Type(() => CreateSectionDto)
+  sections: CreateSectionDto[];
 
   @IsDateString()
   @IsOptional()

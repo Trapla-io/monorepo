@@ -1,8 +1,11 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateTravelBookDto } from './create-travel-book.dto';
-import { IsOptional } from 'class-validator';
+import { ValidateNested } from 'class-validator';
+import { SectionDto } from './section.dto';
+import { Type } from 'class-transformer';
 
 export class UpdateTravelBookDto extends PartialType(CreateTravelBookDto) {
-  @IsOptional()
-  theme: object;
+  @ValidateNested()
+  @Type(() => SectionDto)
+  sections: SectionDto[];
 }

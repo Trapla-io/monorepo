@@ -5,6 +5,7 @@ const SECTIONS_TEMPLATES = [
     label: "Page de garde",
     title: "Page de garde",
     cover_image: null,
+    position: 0,
     items: {
       title: "",
       show_summary: true,
@@ -16,6 +17,7 @@ const SECTIONS_TEMPLATES = [
     label: "Infos utiles",
     title: "Infos utiles",
     cover_image: null,
+    position: 0,
     items: {
       informations: [],
     }
@@ -26,6 +28,7 @@ const SECTIONS_TEMPLATES = [
     label: "Check-list",
     title: "Check-list",
     cover_image: null,
+    position: 0,
     items: {
       check_list: [],
     }
@@ -36,6 +39,7 @@ const SECTIONS_TEMPLATES = [
     label: "Itinéraire",
     title: "Itinéraire",
     cover_image: null,
+    position: 0,
     items: {
       steps: [],
     }
@@ -46,6 +50,7 @@ const SECTIONS_TEMPLATES = [
     label: "Hébergements",
     title: "Hébergements",
     cover_image: null,
+    position: 0,
     items: {
       accommodations: [],
     }
@@ -56,6 +61,7 @@ const SECTIONS_TEMPLATES = [
     label: "Carte",
     title: "Carte",
     cover_image: null,
+    position: 0,
     items: {
       description: "",
       link: "",
@@ -68,6 +74,7 @@ const SECTIONS_TEMPLATES = [
     label: "Transports",
     title: "Transports",
     cover_image: null,
+    position: 0,
     items: {
       routes: [],
     }
@@ -78,6 +85,7 @@ const SECTIONS_TEMPLATES = [
     label: "Page de contact",
     title: "Bon voyage !",
     cover_image: null,
+    position: 0,
     items: {
       email: "",
       phone: "",
