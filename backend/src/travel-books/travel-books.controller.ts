@@ -46,8 +46,8 @@ export class TravelBooksController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.travelBooksService.remove(+id);
+  remove(@GetUser() user: User, @Param('id') id: string) {
+    return this.travelBooksService.remove(+id, user);
   }
 
   @Post(':id/export')

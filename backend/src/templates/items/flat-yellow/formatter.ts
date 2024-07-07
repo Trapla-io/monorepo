@@ -18,10 +18,9 @@ export class FlatYellowFormatter extends AbstractTemplateFormatter {
   }
 
   formatCover(cover) {
-    const { first_name, last_name } = this.travelBook.customer;
     return {
       data: {
-        customerName: `${first_name} ${last_name}`,
+        customerName: this.getCustomerName(),
         startDate: moment(this.travelBook.start_date).format('DD/MM/YYYY'),
         endDate: moment(this.travelBook.end_date).format('DD/MM/YYYY'),
         summary: this.travelBook.sections
@@ -122,6 +121,14 @@ export class FlatYellowFormatter extends AbstractTemplateFormatter {
       },
       theme: this.travelBook.theme,
     };
+  }
+
+  private getCustomerName() {
+    if (!this.travelBook.customer) {
+      return '';
+    }
+    const { first_name, last_name } = this.travelBook.customer;
+    return `${first_name} ${last_name}`;
   }
 
   private coverTitle: string;

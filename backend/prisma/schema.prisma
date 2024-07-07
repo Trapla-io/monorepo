@@ -64,7 +64,7 @@ model Section {
 
   position Int @default(0)
 
-  travel_book TravelBook @relation(fields: [travel_book_id], references: [id])
+  travel_book TravelBook @relation(fields: [travel_book_id], references: [id], onDelete: Cascade)
   travel_book_id Int
 
   created_at DateTime @default(now())
