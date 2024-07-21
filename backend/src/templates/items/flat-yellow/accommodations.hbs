@@ -22,6 +22,9 @@
               <div style="padding-top: 20px;">
                 {{{ injectHTML description }}}
               </div>
+              {{#if link}}
+                <a href="{{link}}" target="_blank">Voir le site.</a>
+              {{/if}}
             </div>
           </div>
         {{/each}}

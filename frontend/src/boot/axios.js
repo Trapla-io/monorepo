@@ -1,6 +1,7 @@
 import { boot } from 'quasar/wrappers'
 import axios from 'axios'
 import router from 'src/router';
+import { useAppStore } from 'src/stores/app.store';
 
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singleton instance here;
@@ -17,10 +18,9 @@ api.interceptors.response.use(
   error => {
     if (error.response && error.response.status === 401) {
       // You can also emit an event or show a notification
-      localStorage.removeItem('access-token');
-      router.push({ name: 'Login' });
+      const appStore = useAppStore();
+      appStore.logout();
     }
-    return Promise.reject(error);
   }
 );
 

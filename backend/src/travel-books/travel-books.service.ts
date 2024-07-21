@@ -65,6 +65,9 @@ export class TravelBooksService {
           customer: true,
           sections: true,
         },
+        orderBy: {
+          created_at: 'desc',
+        },
       });
       return travelBooks;
     } catch (error) {

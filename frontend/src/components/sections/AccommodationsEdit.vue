@@ -88,6 +88,25 @@
           </QTd>
         </template>
 
+        <template #body-cell-link="props">
+          <QTd
+            :props="props"
+          >
+            <QBadge
+              v-if="props.value"
+              color="green"
+            >
+              <QIcon name="check" />
+            </QBadge>
+            <QBadge
+              v-else
+              color="red"
+            >
+              <QIcon name="close" />
+            </QBadge>
+          </QTd>
+        </template>
+
         <template #body-cell-actions="props">
           <QTd
             :props="props"
@@ -156,6 +175,12 @@ export default {
           label: 'Prix',
           align: 'left',
           field: 'price',
+        },
+        {
+          name: 'link',
+          label: 'Lien',
+          align: 'left',
+          field: 'link',
         },
         {
           name: 'actions',

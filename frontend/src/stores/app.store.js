@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
 import { useTravelBooksStore } from "./travel-books.store";
 import { useCustomersStore } from "./customers.store";
+import router from "src/router";
 
 export const useAppStore = defineStore('app', {
   state: () => ({
@@ -16,6 +17,13 @@ export const useAppStore = defineStore('app', {
       this.accessToken = accessToken;
       this.isLoggedIn = true;
       api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    },
+    logout() {
+      localStorage.removeItem('access-token');
+      this.accessToken = null;
+      this.isLoggedIn = false;
+      this.isAppLoaded = true;
+      router.push({ name: 'Login' });
     },
     async load() {
       const accessToken = localStorage.getItem('access-token');

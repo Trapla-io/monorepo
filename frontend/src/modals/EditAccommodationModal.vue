@@ -33,6 +33,10 @@
           />
         </div>
       </div>
+      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Lien</p>
+      <BInput
+        v-model="form.link"
+      />
       <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Image</p>
       <BImagePicker
         v-model="computedImage"
