@@ -7,7 +7,7 @@
     dense
   >
     <template v-slot:append>
-      <QIcon class="cursor-pointer" name="event">
+      <QIcon class="cursor-pointer" name="eva-calendar-outline">
         <QPopupProxy
           ref="qDateProxy"
           transition-show="scale"

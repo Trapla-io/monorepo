@@ -27,7 +27,7 @@
           <QItemSection avatar class="col-3">
             <QIcon
               color="grey-6"
-              name="map"
+              name="eva-map-outline"
             />
           </QItemSection>
           <QItemSection class="text-weight-medium col-9 ">
@@ -44,7 +44,7 @@
           <QItemSection avatar class="col-3">
             <QIcon
               color="grey-6"
-              name="person_outline"
+              name="eva-people-outline"
             />
           </QItemSection>
           <QItemSection class="text-weight-medium col-9 ">

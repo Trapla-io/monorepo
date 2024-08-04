@@ -19,7 +19,7 @@
           label="Pexels"
         />
         <QTab
-          icon="collections"
+          icon="eva-image"
           name="upload"
           label="Vos images"
         />

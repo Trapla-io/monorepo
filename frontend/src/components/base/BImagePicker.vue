@@ -4,7 +4,7 @@
     :label="computedLabel"
     color="grey-6"
     outline
-    icon-right="image"
+    icon-right="eva-image-2"
     @click="openImagePickerModal"
   />
   <QImg
@@ -21,12 +21,12 @@
     >
       <QBtn
         class="absolute-top-right"
-        icon="delete"
+        icon="eva-trash-2-outline"
         flat
         @click.stop="deleteImage"
       />
       <QBtn
-        icon="edit"
+        icon="eva-edit-outline"
         flat
         label="Modifier"
         @click="openImagePickerModal"

@@ -1,7 +1,7 @@
 const SECTIONS_TEMPLATES = [
   {
     tag: "cover",
-    icon: 'description',
+    icon: 'eva-book-outline',
     label: "Page de garde",
     title: "Page de garde",
     cover_image: null,
@@ -13,7 +13,7 @@ const SECTIONS_TEMPLATES = [
   },
   {
     tag: "useful-informations",
-    icon: 'info',
+    icon: 'eva-info-outline',
     label: "Infos utiles",
     title: "Infos utiles",
     cover_image: null,
@@ -24,7 +24,7 @@ const SECTIONS_TEMPLATES = [
   },
   {
     tag: "check-list",
-    icon: 'check',
+    icon: 'eva-checkmark-square-outline',
     label: "Check-list",
     title: "Check-list",
     cover_image: null,
@@ -35,7 +35,7 @@ const SECTIONS_TEMPLATES = [
   },
   {
     tag: "itinerary",
-    icon: 'map',
+    icon: 'eva-map-outline',
     label: "Itinéraire",
     title: "Itinéraire",
     cover_image: null,
@@ -46,7 +46,7 @@ const SECTIONS_TEMPLATES = [
   },
   {
     tag: "accommodations",
-    icon: 'hotel',
+    icon: 'eva-home-outline',
     label: "Hébergements",
     title: "Hébergements",
     cover_image: null,
@@ -57,7 +57,7 @@ const SECTIONS_TEMPLATES = [
   },
   {
     tag: "map",
-    icon: 'location_on',
+    icon: 'eva-compass-outline',
     label: "Carte",
     title: "Carte",
     cover_image: null,
@@ -81,7 +81,7 @@ const SECTIONS_TEMPLATES = [
   },
   {
     tag: "contact",
-    icon: "contact_phone",
+    icon: "eva-phone-call-outline",
     label: "Page de contact",
     title: "Bon voyage !",
     cover_image: null,

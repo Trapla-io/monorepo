@@ -27,7 +27,7 @@
           <QBtn
             flat
             dense
-            icon="edit"
+            icon="eva-edit-outline"
             @click="openEditCustomerModal(props.row)"
           />
         </QTd>

@@ -37,9 +37,9 @@
             </div>
             <div>
               <QIcon
-                class="q-pa-sm"
-                name="more_vert"
-                size="xs"
+                class="q-pt-none"
+                name="eva-more-horizontal-outline"
+                size="sm"
                 @click.stop
               >
                 <QMenu
@@ -54,7 +54,7 @@
                     >
                       <QItemSection side>
                         <QIcon
-                          name="content_copy"
+                          name="eva-copy-outline"
                           size="xs"
                           color="dark"
                         />
@@ -70,7 +70,7 @@
                     >
                       <QItemSection side>
                         <QIcon
-                          name="delete"
+                          name="eva-trash-2-outline"
                           size="xs"
                           color="negative"
                         />

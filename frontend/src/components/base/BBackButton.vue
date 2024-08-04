@@ -1,6 +1,6 @@
 <template>
   <QBtn
-    icon="arrow_back"
+    icon="eva-arrow-ios-back"
     round
     dense
     unelevated

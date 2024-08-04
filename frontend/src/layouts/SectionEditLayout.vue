@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-between q-mb-lg border-bottom">
-    <h5 class="q-mb-sm">{{ title }}</h5>
+    <h6 class="q-mb-sm">{{ title }}</h6>
   </div>
 
   <div class="row q-mb-lg">

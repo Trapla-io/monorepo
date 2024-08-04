@@ -31,7 +31,7 @@
 
                   <QBtn
                     v-if="displayActions(element.id)"
-                    icon="delete"
+                    icon="eva-trash-2-outline"
                     text-color="dark"
                     unelevated
                     size="sm"
