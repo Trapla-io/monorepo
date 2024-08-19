@@ -17,11 +17,13 @@ export class UsersService {
 
   async findOne(id: number) {
     try {
-      return await this.prisma.user.findUnique({
+      const user = await this.prisma.user.findUnique({
         where: {
           id: id,
         },
       });
+      delete user.password;
+      return user;
     } catch (error) {
       throw new Error(error);
     }
