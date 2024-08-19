@@ -3,6 +3,7 @@ import { api } from "src/boot/axios";
 import { useTravelBooksStore } from "./travel-books.store";
 import { useCustomersStore } from "./customers.store";
 import router from "src/router";
+import { useUserStore } from "./user.store";
 
 export const useAppStore = defineStore('app', {
   state: () => ({
@@ -41,7 +42,9 @@ export const useAppStore = defineStore('app', {
     async fetchAll() {
       const travelBooksStore = useTravelBooksStore();
       const customerStore = useCustomersStore();
+      const userStore = useUserStore();
   
+      await userStore.get();
       await travelBooksStore.getAll();
       await customerStore.getAll();
     }
