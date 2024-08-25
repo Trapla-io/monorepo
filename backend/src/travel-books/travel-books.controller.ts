@@ -14,7 +14,7 @@ import { UpdateTravelBookDto } from './dto/update-travel-book.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { GetUser } from 'src/auth/decorators/get-user-decorator';
 import { User } from '@prisma/client';
-import { CreateSectionDto } from './dto/create-section.dto';
+import { AddSectionDto } from './dto/add-section.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('travel-books')
@@ -68,7 +68,7 @@ export class TravelBooksController {
   addSection(
     @GetUser() user: User,
     @Param('id') id: string,
-    @Body() dto: CreateSectionDto,
+    @Body() dto: AddSectionDto,
   ) {
     return this.travelBooksService.addSection(+id, dto, user);
   }

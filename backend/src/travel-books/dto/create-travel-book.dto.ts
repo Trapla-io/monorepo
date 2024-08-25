@@ -1,6 +1,7 @@
 import { Type } from 'class-transformer';
 import {
   IsDateString,
+  IsNotEmpty,
   IsNumber,
   IsObject,
   IsOptional,
@@ -10,7 +11,7 @@ import {
 import { CreateSectionDto } from './create-section.dto';
 export class CreateTravelBookDto {
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
   title: string;
 
   @IsString()

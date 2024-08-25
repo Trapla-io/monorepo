@@ -4,8 +4,8 @@ import { UpdateTravelBookDto } from './dto/update-travel-book.dto';
 import { PdfService } from 'src/pdf/pdf.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '@prisma/client';
-import { CreateSectionDto } from './dto/create-section.dto';
 import { SECTIONS } from '../helpers/travel-book-sections.helper';
+import { AddSectionDto } from './dto/add-section.dto';
 
 const DEFAULT_THEME = {
   primary: '#0E5450',
@@ -159,7 +159,7 @@ export class TravelBooksService {
     }
   }
 
-  async addSection(id: number, dto: CreateSectionDto, user: User) {
+  async addSection(id: number, dto: AddSectionDto, user: User) {
     try {
       const sectionData = SECTIONS.find((section) => section.tag === dto.tag);
       const travelBook = await this.prisma.travelBook.findUnique({
