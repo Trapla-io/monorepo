@@ -61,7 +61,7 @@ export default {
       set(value) {
         const [day, month, year] = value.split('/').map(Number);
 
-        this.$emit('update:modelValue', new Date(year, month - 1, day));
+        this.$emit('update:modelValue', new Date(year, month - 1, day, 12));
       },
     },
   },
