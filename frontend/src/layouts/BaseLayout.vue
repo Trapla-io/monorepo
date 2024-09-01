@@ -51,6 +51,23 @@
             <QItemLabel class="text-grey-6">Clients</QItemLabel>
           </QItemSection>
         </QItem>
+
+        <QItem
+          :to="{ name: 'DatabaseIndex' }"
+          exact
+          clickable
+          active-class="active"
+        >
+          <QItemSection avatar class="col-3">
+            <QIcon
+              color="grey-6"
+              name="layers_outline"
+            />
+          </QItemSection>
+          <QItemSection class="text-weight-medium col-9 ">
+            <QItemLabel class="text-grey-6">Database</QItemLabel>
+          </QItemSection>
+        </QItem>
       </QList>
     </QDrawer>
 

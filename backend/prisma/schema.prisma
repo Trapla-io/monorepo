@@ -22,7 +22,7 @@ model User {
   travel_books TravelBook[]
   customers Customer[]
   images Image[]
-  travel_bookmarks TravelBookmark[]
+  modules DatabaseModule[]
   tags Tag[]
 
   default_travel_book_template String @default("flat-yellow")
@@ -72,7 +72,6 @@ model Section {
   created_at DateTime @default(now())
 }
 
-
 model Customer {
   id        Int      @default(autoincrement()) @id
 
@@ -89,38 +88,19 @@ model Customer {
   created_at DateTime @default(now())
 }
 
-model TravelBookmark {
+model DatabaseModule {
   id        Int      @default(autoincrement()) @id
 
-  title     String
-  type     String
+  title      String
+  content    Json
 
-  data     Json
+  type      String
+  tags      Tag[]
 
-  tags    Tag[]
-
-  user    User     @relation(fields: [user_id], references: [id])
-
-  user_id Int
+  user      User     @relation(fields: [user_id], references: [id])
+  user_id   Int
 
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}
-
-model Tag {
-  id        Int      @default(autoincrement()) @id
-
-  name     String
-  color    String
-
-  travel_bookmarks    TravelBookmark[]
-
-  user    User     @relation(fields: [user_id], references: [id])
-
-  user_id Int
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
 }
 
 model Image {
@@ -132,4 +112,16 @@ model Image {
   user_id  Int
 
   created_at DateTime @default(now())
+}
+
+model Tag {
+  id        Int      @default(autoincrement()) @id
+
+  name      String
+  color     String
+
+  user      User     @relation(fields: [user_id], references: [id])
+  modules   DatabaseModule[]
+
+  user_id   Int
 }
