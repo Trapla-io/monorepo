@@ -1,20 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { TagsService } from './tags.service';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
+import { GetUser } from '../auth/decorators/get-user-decorator';
+import { User } from '@prisma/client';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('tags')
 export class TagsController {
   constructor(private readonly tagsService: TagsService) {}
 
   @Post()
-  create(@Body() createTagDto: CreateTagDto) {
-    return this.tagsService.create(createTagDto);
+  create(@GetUser() user: User, @Body() dto: CreateTagDto) {
+    return this.tagsService.create(user, dto);
   }
 
   @Get()
-  findAll() {
-    return this.tagsService.findAll();
+  findAll(@GetUser() user: User) {
+    return this.tagsService.findAll(user);
   }
 
   @Get(':id')
@@ -23,12 +27,12 @@ export class TagsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTagDto: UpdateTagDto) {
-    return this.tagsService.update(+id, updateTagDto);
+  update(@Param('id') id: string, @GetUser() user: User, @Body() updateTagDto: UpdateTagDto) {
+    return this.tagsService.update(user, +id, updateTagDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tagsService.remove(+id);
+  remove(@Param('id') id: string, @GetUser() user: User) {
+    return this.tagsService.remove(user, +id);
   }
 }

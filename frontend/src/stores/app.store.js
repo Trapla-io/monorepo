@@ -4,6 +4,7 @@ import { useTravelBooksStore } from "./travel-books.store";
 import { useCustomersStore } from "./customers.store";
 import router from "src/router";
 import { useUserStore } from "./user.store";
+import { useTagsStore } from "./tags.store";
 
 export const useAppStore = defineStore('app', {
   state: () => ({
@@ -43,10 +44,12 @@ export const useAppStore = defineStore('app', {
       const travelBooksStore = useTravelBooksStore();
       const customerStore = useCustomersStore();
       const userStore = useUserStore();
+      const tagsStore = useTagsStore();
   
       await userStore.get();
       await travelBooksStore.getAll();
       await customerStore.getAll();
+      await tagsStore.getAll();
     }
   },
 });

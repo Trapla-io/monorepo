@@ -101,6 +101,7 @@ model DatabaseModule {
   user_id   Int
 
   created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model Image {

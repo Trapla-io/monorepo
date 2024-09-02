@@ -61,11 +61,11 @@
           <QItemSection avatar class="col-3">
             <QIcon
               color="grey-6"
-              name="layers_outline"
+              name="eva-layers-outline"
             />
           </QItemSection>
           <QItemSection class="text-weight-medium col-9 ">
-            <QItemLabel class="text-grey-6">Database</QItemLabel>
+            <QItemLabel class="text-grey-6">Base de donnée</QItemLabel>
           </QItemSection>
         </QItem>
       </QList>

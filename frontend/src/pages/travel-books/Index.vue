@@ -16,6 +16,7 @@
         stack-label
         use-chips
         outlined
+        rounded
       />
     </div>
 

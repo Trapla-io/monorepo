@@ -9,8 +9,8 @@ import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { CustomersModule } from './customers/customers.module';
 import { ImagesModule } from './images/images.module';
-import { TravelBookmarksModule } from './travel_bookmarks/travel_bookmarks.module';
 import { TagsModule } from './tags/tags.module';
+import { DatabaseModulesModule } from './database_modules/database_modules.module';
 
 @Module({
   imports: [
@@ -23,8 +23,8 @@ import { TagsModule } from './tags/tags.module';
     PrismaModule,
     CustomersModule,
     ImagesModule,
-    TravelBookmarksModule,
     TagsModule,
+    DatabaseModulesModule,
   ],
   providers: [PrismaService],
 })

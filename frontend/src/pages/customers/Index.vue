@@ -50,7 +50,6 @@
 <script>
 import { mapStores } from 'pinia';
 import { useCustomersStore } from 'src/stores/customers.store';
-import { RouterLink } from 'vue-router';
 
 export default {
   name: 'CustomersIndex',

@@ -1,4 +1,11 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateTagDto } from './create-tag.dto';
+import { IsHexColor, IsOptional, IsString } from 'class-validator';
 
-export class UpdateTagDto extends PartialType(CreateTagDto) {}
+export class UpdateTagDto {
+  @IsOptional()
+  @IsString()
+  name: string;
+
+  @IsHexColor()
+  @IsOptional()
+  color: string;
+}
