@@ -3,32 +3,9 @@
     :title="title"
     hideClose
   >
-    <div>
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Titre</p>
-      <BInput
-        v-model="form.title"
-      />
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Contenu</p>
-      <BInput
-        v-model="form.content"
-        type="textarea"
-      />
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Image</p>
-      <BImagePicker
-        v-model="computedImage"
-      />
-      <!-- <QUploader
-        class="full-width"
-        ref="modalUploader"
-        label="Importez une image"
-        text-color="white"
-        accept=".jpg, image/*"
-        @added="computedImage = $event"
-        hide-upload-btn
-        bordered
-        flat
-      /> -->
-    </div>
+    <InformationForm
+      v-model="form"
+    />
     <QCardActions
         align="right"
         class="q-mt-xl q-pr-none"
@@ -41,12 +18,12 @@
   </BModal>
 </template>
 <script>
-import BInput from 'src/components/base/BInput.vue';
 import BModal from 'src/components/base/BModal.vue';
+import InformationForm from 'src/components/forms/InformationForm.vue';
 
 export default {
   name: 'EditInformationModal',
-  components: { BModal, BInput },
+  components: { BModal, InformationForm },
   props: {
     title: {
       type: String,
@@ -62,22 +39,8 @@ export default {
       form: {},
     };
   },
-  computed: {
-    computedImage: {
-      get() {
-        return this.form.image;
-      },
-      set(value) {
-        this.form.image = value;
-      },
-    },
-  },
   mounted() {
     this.form = {...this.information};
-
-    this.$nextTick(() => {
-      // this.setImageInUploader();
-    });
   },
   methods: {
     setImageInUploader() {

@@ -113,14 +113,14 @@
           >
             <QBtn
               @click="openEditAccommodationModal(props.rowIndex)"
-              icon="edit"
+              icon="eva-edit-outline"
               flat
               round
               dense
             />
             <QBtn
               @click="deleteAccommodation(props.rowIndex)"
-              icon="delete"
+              icon="eva-trash-2-outline"
               flat
               round
               dense

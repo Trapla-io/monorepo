@@ -3,45 +3,9 @@
     :title="title"
     hide-close
   >
-    <div>
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Titre</p>
-      <BInput
-        v-model="form.title"
-      />
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Description</p>
-      <QEditor
-        v-model="form.description"
-        label="Description"
-        filled
-        dense
-      />
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Prix</p>
-      <BInput
-        v-model="form.price"
-      />
-      <div class="row items-center q-mt-md">
-        <div>
-          <p class="text-subtitle1 q-ma-none text-grey-6">Date d'arrivée</p>
-          <BDatePicker
-            v-model="form.arrival_date"
-          />
-        </div>
-        <div class="q-ml-md">
-          <p class="text-subtitle1 q-ma-none text-grey-6">Date de départ</p>
-          <BDatePicker
-            v-model="form.departure_date"
-          />
-        </div>
-      </div>
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Lien</p>
-      <BInput
-        v-model="form.link"
-      />
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Image</p>
-      <BImagePicker
-        v-model="computedImage"
-      />
-    </div>
+    <AccommodationForm
+      v-model="form"
+    />
     <QCardActions
         align="right"
         class="q-mt-xl q-pr-none"
@@ -55,13 +19,12 @@
 </template>
 
 <script>
-import { QEditor } from 'quasar';
-import BInput from 'src/components/base/BInput.vue';
 import BModal from 'src/components/base/BModal.vue';
+import AccommodationForm from 'src/components/forms/AccommodationForm.vue';
 
 export default {
   name: 'EditAccommodationModal',
-  components: { BModal, BInput, QEditor },
+  components: { BModal, AccommodationForm },
   props: {
     title: {
       type: String,
@@ -76,16 +39,6 @@ export default {
     return {
       form: {},
     };
-  },
-  computed: {
-    computedImage: {
-      get() {
-        return this.form.image;
-      },
-      set(value) {
-        this.form.image = value;
-      },
-    },
   },
   mounted() {
     this.form = {...this.accommodation};

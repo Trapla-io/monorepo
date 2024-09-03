@@ -3,17 +3,9 @@
     :title="title"
     hideClose
   >
-    <div>
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Titre</p>
-      <BInput
-        v-model="form.title"
-      />
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Contenu</p>
-      <BInput
-        v-model="form.content"
-        type="textarea"
-      />
-    </div>
+    <CheckListItemForm
+      v-model="form"
+    />
     <QCardActions
         align="right"
         class="q-mt-xl q-pr-none"
@@ -26,12 +18,12 @@
   </BModal>
 </template>
 <script>
-import BInput from 'src/components/base/BInput.vue';
 import BModal from 'src/components/base/BModal.vue';
+import CheckListItemForm from 'src/components/forms/CheckListItemForm.vue';
 
 export default {
   name: 'EditCheckListItemModal',
-  components: { BModal, BInput },
+  components: { BModal, CheckListItemForm },
   props: {
     title: {
       type: String,

@@ -68,14 +68,14 @@
           >
             <QBtn
               @click="openEditCheckListItemModal(props.rowIndex)"
-              icon="edit"
+              icon="eva-edit-outline"
               flat
               round
               dense
             />
             <QBtn
               @click="deleteCheckListItem(props.rowIndex)"
-              icon="delete"
+              icon="eva-trash-2-outline"
               flat
               round
               dense
