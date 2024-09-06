@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Put } from '@nestjs/common';
 import { DatabaseModulesService } from './database_modules.service';
 import { CreateDatabaseModuleDto } from './dto/create-database_module.dto';
 import { UpdateDatabaseModuleDto } from './dto/update-database_module.dto';
@@ -26,13 +26,13 @@ export class DatabaseModulesController {
     return this.databaseModulesService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDatabaseModuleDto: UpdateDatabaseModuleDto) {
-    return this.databaseModulesService.update(+id, updateDatabaseModuleDto);
+  @Put(':id')
+  update(@Param('id') id: string, @GetUser() user: User, @Body() dto: UpdateDatabaseModuleDto) {
+    return this.databaseModulesService.update(+id, user, dto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.databaseModulesService.remove(+id);
+  remove(@Param('id') id: string, @GetUser() user: User) {
+    return this.databaseModulesService.remove(+id, user);
   }
 }

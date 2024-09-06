@@ -6,7 +6,7 @@
     />
     <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Description</p>
     <QEditor
-      v-model="form.description"
+      v-model="computedDescription"
       label="Description"
       filled
       dense
@@ -48,7 +48,9 @@ export default {
   props: {
     modelValue: {
       type: Object,
-      default: () => ({}),
+      default: () => ({
+        description: '',
+      }),
     },
   },
   computed: {
@@ -58,6 +60,14 @@ export default {
       },
       set(value) {
         this.$emit('update:modelValue', value);
+      },
+    },
+    computedDescription: {
+      get() {
+        return this.form.description || '';
+      },
+      set(value) {
+        this.form.description = value;
       },
     },
   },

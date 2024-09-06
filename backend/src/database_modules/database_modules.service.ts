@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDatabaseModuleDto } from './dto/create-database_module.dto';
 import { UpdateDatabaseModuleDto } from './dto/update-database_module.dto';
 import { User } from '@prisma/client';
@@ -45,11 +45,47 @@ export class DatabaseModulesService {
     return `This action returns a #${id} databaseModule`;
   }
 
-  update(id: number, updateDatabaseModuleDto: UpdateDatabaseModuleDto) {
-    return `This action updates a #${id} databaseModule`;
+  async update(id: number, user: User, dto: UpdateDatabaseModuleDto) {
+    try {
+      return await this.prisma.databaseModule.update({
+        where: {
+          id,
+          user_id: user.id,
+        },
+        data: {
+          title: dto.title,
+          content: dto.content,
+          type: dto.type,
+          tags: { set: dto.tag_ids.map((id) => ({ id })) },
+        },
+        include: {
+          tags: true,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      if (error.code === 'P2025') {
+        throw new NotFoundException('DatabaseModule not found');
+      } else {
+        throw error;
+      }
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} databaseModule`;
+  async remove(id: number, user: User) {
+    try {
+      return await this.prisma.databaseModule.delete({
+        where: {
+          id,
+          user_id: user.id,
+        },
+      });
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('DatabaseModule not found');
+      } else {
+        throw error;
+      }
+    }
   }
 }

@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { SECTIONS_TEMPLATES } from 'src/helpers/travelBookSections';
+import { DATABASE_MODULES_INFORMATION } from 'src/helpers/databaseModules';
 
 export default {
   name: 'SelectModuleType',
@@ -23,10 +23,10 @@ export default {
   },
   data() {
     return {
-      types: SECTIONS_TEMPLATES.map(section => {
+      types: DATABASE_MODULES_INFORMATION.map(databaseModule => {
         return {
-          label: section.label,
-          value: section.tag,
+          label: databaseModule.label,
+          value: databaseModule.name,
         }
       }),
     }
@@ -34,10 +34,10 @@ export default {
   computed: {
     selectedType: {
       get() {
-        return this.modelValue;
+        return DATABASE_MODULES_INFORMATION.find(databaseModule => databaseModule.name === this.modelValue)?.label;
       },
       set(value) {
-        this.$emit('update:modelValue', value);
+        this.$emit('update:modelValue', value.value);
       }
     }
   },
