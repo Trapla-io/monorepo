@@ -26,23 +26,14 @@
         flat
       /> -->
 
-      <QTable
+      <SectionItemsTable
         class="q-mt-md"
         title="Check-list"
         :rows="section.items.check_list"
         :columns="columns"
-        flat
-        bordered
         no-data-label="Cliquez sur le bouton + pour ajouter un élément à la liste"
+        @add="openAddCheckListItemModal"
       >
-        <template #top-right>
-          <BButton
-          @click="openAddCheckListItemModal"
-          size="sm"
-          icon="add"
-          />
-        </template>
-
         <template #body-cell-content="props">
           <QTd
             :props="props"
@@ -82,7 +73,7 @@
             />
           </QTd>
         </template>
-      </QTable>
+      </SectionItemsTable>
     </div>
   </SectionEditLayout>
 </template>
@@ -91,10 +82,11 @@
 import SectionEditLayout from 'src/layouts/SectionEditLayout.vue';
 import { useTravelBooksStore } from 'src/stores/travel-books.store';
 import { mapStores } from 'pinia';
+import SectionItemsTable from '../SectionItemsTable.vue';
 
 export default {
   name: 'SectionCheckListEdit',
-  components: { SectionEditLayout },
+  components: { SectionEditLayout, SectionItemsTable },
   props: {
     section: {
       type: Object,

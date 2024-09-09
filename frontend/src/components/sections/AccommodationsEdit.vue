@@ -14,23 +14,14 @@
         v-model="computedImage"
       />
 
-      <QTable
+      <SectionItemsTable
         class="q-mt-md"
         title="Hébergements"
         :rows="section.items.accommodations"
         :columns="columns"
-        flat
-        bordered
         no-data-label="Cliquez sur le bouton + pour ajouter un hébergement"
+        @add="openAddAccommodationModal"
       >
-        <template #top-right>
-          <BButton
-            @click="openAddAccommodationModal"
-            size="sm"
-            icon="add"
-          />
-        </template>
-
         <template #body-cell-description="props">
           <QTd
             :props="props"
@@ -127,7 +118,7 @@
             />
           </QTd>
         </template>
-      </QTable>
+      </SectionItemsTable>
     </div>
   </SectionEditLayout>
 </template>
@@ -136,10 +127,11 @@
 import SectionEditLayout from 'src/layouts/SectionEditLayout.vue';
 import { useTravelBooksStore } from 'src/stores/travel-books.store';
 import { mapStores } from 'pinia';
+import SectionItemsTable from '../SectionItemsTable.vue';
 
 export default {
   name: 'SectionAccommodationsEdit',
-  components: { SectionEditLayout },
+  components: { SectionEditLayout, SectionItemsTable },
   props: {
     section: {
       type: Object,

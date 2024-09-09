@@ -26,23 +26,14 @@
         flat
       /> -->
 
-      <QTable
+      <SectionItemsTable
         class="q-mt-md"
         title="Informations"
         :rows="section.items.informations"
         :columns="columns"
-        flat
-        bordered
         no-data-label="Cliquez sur le bouton + pour ajouter une information"
+        @add="openAddInformationModal"
       >
-        <template #top-right>
-          <BButton
-          @click="openAddInformationModal"
-          size="sm"
-          icon="add"
-          />
-        </template>
-
         <template #body-cell-content="props">
           <QTd
             :props="props"
@@ -101,7 +92,7 @@
             />
           </QTd>
         </template>
-      </QTable>
+      </SectionItemsTable>
     </div>
   </SectionEditLayout>
 </template>
@@ -109,10 +100,10 @@
 import SectionEditLayout from 'src/layouts/SectionEditLayout.vue';
 import { useTravelBooksStore } from 'src/stores/travel-books.store';
 import { mapStores } from 'pinia';
-import { QTable } from 'quasar';
+import SectionItemsTable from '../SectionItemsTable.vue';
 
 export default {
-  components: { SectionEditLayout, QTable },
+  components: { SectionEditLayout, SectionItemsTable },
   props: {
     section: {
       type: Object,

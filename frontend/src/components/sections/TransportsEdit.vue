@@ -14,23 +14,14 @@
         v-model="computedImage"
       />
 
-      <QTable
+      <SectionItemsTable
         class="q-mt-md"
         title="Trajets"
         :rows="section.items.routes"
         :columns="columns"
-        flat
-        bordered
         no-data-label="Cliquez sur le bouton + pour ajouter un trajet."
+        @add="openAddRouteModal"
       >
-      <template #top-right>
-          <BButton
-          @click="openAddRouteModal"
-          size="sm"
-          icon="add"
-          />
-        </template>
-
         <template #body-cell-content="props">
           <QTd
             :props="props"
@@ -68,7 +59,7 @@
             />
           </QTd>
         </template>
-      </QTable>
+      </SectionItemsTable>
     </div>
   </SectionEditLayout>
 </template>
@@ -78,10 +69,11 @@ import { QLinearProgress } from 'quasar';
 import SectionEditLayout from 'src/layouts/SectionEditLayout.vue';
 import { mapStores } from 'pinia';
 import { useTravelBooksStore } from 'src/stores/travel-books.store';
+import SectionItemsTable from '../SectionItemsTable.vue';
 
 export default {
   name: 'TransportsEdit',
-  components: { SectionEditLayout, QLinearProgress },
+  components: { SectionEditLayout, QLinearProgress, SectionItemsTable },
   props: {
     section: {
       type: Object,

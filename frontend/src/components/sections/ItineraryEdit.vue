@@ -26,23 +26,14 @@
         flat
       /> -->
 
-      <QTable
+      <SectionItemsTable
         class="q-mt-md"
         title="Étapes"
         :rows="section.items.steps"
         :columns="columns"
-        flat
-        bordered
         no-data-label="Cliquez sur le bouton + pour ajouter une étape"
+        @add="openAddStepModal"
       >
-        <template #top-right>
-          <BButton
-          @click="openAddStepModal"
-          size="sm"
-          icon="add"
-          />
-        </template>
-
         <template #body-cell-subtitle="props">
           <QTd
             :props="props"
@@ -120,7 +111,7 @@
             />
           </QTd>
         </template>
-      </QTable>
+      </SectionItemsTable>
     </div>
   </SectionEditLayout>
 </template>
@@ -129,10 +120,11 @@
 import SectionEditLayout from 'src/layouts/SectionEditLayout.vue';
 import { useTravelBooksStore } from 'src/stores/travel-books.store';
 import { mapStores } from 'pinia';
+import SectionItemsTable from '../SectionItemsTable.vue';
 
 export default {
   name: 'SectionItineraryEdit',
-  components: { SectionEditLayout },
+  components: { SectionEditLayout, SectionItemsTable },
   props: {
     section: {
       type: Object,
