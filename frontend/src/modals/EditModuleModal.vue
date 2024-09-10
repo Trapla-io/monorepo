@@ -54,6 +54,10 @@ export default {
     databaseModule: {
       type: Object,
       default: null,
+    },
+    saveFromExisting: {
+      type: Boolean,
+      default: false,
     }
   },
   data() {
@@ -67,13 +71,13 @@ export default {
   },
   computed: {
     isEdit() {
-      return !!this.databaseModule;
+      return this.databaseModule;
     },
     title() {
-      return this.isEdit ? 'Modifier le module' : 'Créer un module';
+      return (this.isEdit && !this.saveFromExisting) ? 'Modifier le module' : 'Créer un module';
     },
     buttonLabel() {
-      return this.isEdit ? 'Modifier' : 'Créer';
+      return (this.isEdit && !this.saveFromExisting) ? 'Modifier' : 'Créer';
     },
     componentFromType() {
       return DATABASE_MODULES_INFORMATION.find(databaseModule => databaseModule.name === this.form.type)?.formComponent;

@@ -4,11 +4,20 @@
     bordered
   >
   <template #top-right>
-    <BButton
-      @click="$emit('add')"
-      size="sm"
-      icon="add"
-    />
+    <div>
+      <QBtn
+        class="q-mr-md"
+        @click="$emit('pick-module')"
+        icon="eva-layers-outline"
+        flat
+        text-color="purple-8"
+      />
+      <BButton
+        @click="$emit('add')"
+        size="sm"
+        icon="add"
+      />
+    </div>
   </template>
 
   <template v-for="(_, name) in $slots" #[name]="scope">
@@ -20,6 +29,6 @@
 <script> 
 export default {
   name: 'SectionItemsTable',
-  emits: ['add'],
+  emits: ['add', 'pick-module'],
 }
 </script>

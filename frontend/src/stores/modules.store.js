@@ -5,6 +5,15 @@ export const useModulesStore = defineStore('modules', {
   state: () => ({
     modules: [],
   }),
+  getters: {
+    async getOrLoad() {
+      if (this.modules.length === 0) {
+        await this.getAll();
+      }
+
+      return this.modules;
+    }
+  },
   actions: {
     async getAll() {
       const { data } = await api.get('/database-modules');

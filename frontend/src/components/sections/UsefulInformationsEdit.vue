@@ -33,6 +33,7 @@
         :columns="columns"
         no-data-label="Cliquez sur le bouton + pour ajouter une information"
         @add="openAddInformationModal"
+        @pick-module="openModulePickerModal"
       >
         <template #body-cell-content="props">
           <QTd
@@ -234,6 +235,27 @@ export default {
         items: {
           ...this.section.items,
           informations: this.section.items.informations.filter((_, index) => index !== rowIndex),
+        },
+      });
+    },
+    openModulePickerModal() {
+      this.$modals.open('ModulePickerModal', {
+        events: {
+          submit: (data) => {
+            this.travelBooksStore.updateCurrentTravelBookSection({
+              ...this.section,
+              items: {
+                ...this.section.items,
+                informations: [
+                  ...this.section.items.informations,
+                  {
+                    ...data.content,
+                    module_id: data.id,
+                  },
+                ],
+              },
+            });
+          },
         },
       });
     },

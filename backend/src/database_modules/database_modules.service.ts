@@ -17,7 +17,7 @@ export class DatabaseModulesService {
           type: dto.type,
           user_id: user.id,
           tags: {
-            connect: dto.tag_ids.map((id) => ({ id })),
+            connect: dto.tag_ids?.map((id) => ({ id })),
           },
         },
       });
@@ -56,7 +56,7 @@ export class DatabaseModulesService {
           title: dto.title,
           content: dto.content,
           type: dto.type,
-          tags: { set: dto.tag_ids.map((id) => ({ id })) },
+          tags: { set: dto.tag_ids?.map((id) => ({ id })) },
         },
         include: {
           tags: true,
