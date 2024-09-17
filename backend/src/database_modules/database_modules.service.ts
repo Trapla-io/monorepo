@@ -21,6 +21,9 @@ export class DatabaseModulesService {
             connect: dto.tag_ids?.map((id) => ({ id })),
           },
         },
+        include: {
+          tags: true,
+        },
       });
     } catch (error) {
       throw error;

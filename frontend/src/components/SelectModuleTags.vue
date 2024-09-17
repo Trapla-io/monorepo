@@ -164,7 +164,7 @@ export default {
       if (this.input === '') {
         return this.tags;
       } else {
-        return this.tags.filter(tag => tag.name.includes(this.input));
+        return this.tags.filter(tag => tag.name.toLowerCase().includes(this.input.toLowerCase()));
       }
     },
     displayAddTagOption() {
