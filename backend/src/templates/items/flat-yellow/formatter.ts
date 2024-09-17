@@ -36,7 +36,7 @@ export class FlatYellowFormatter extends AbstractTemplateFormatter {
   }
 
   formatTransports(transports) {
-    const routes = this.managePageBreaks(transports.items.routes);
+    const routes = this.managePageBreaks(transports.items.list);
     return {
       data: {
         coverTitle: this.coverTitle,
@@ -65,9 +65,7 @@ export class FlatYellowFormatter extends AbstractTemplateFormatter {
     return {
       data: {
         coverTitle: this.coverTitle,
-        informations: this.managePageBreaks(
-          usefulInformations.items.informations,
-        ),
+        informations: this.managePageBreaks(usefulInformations.items.list),
         ...usefulInformations,
       },
       theme: this.travelBook.theme,
@@ -78,7 +76,7 @@ export class FlatYellowFormatter extends AbstractTemplateFormatter {
     return {
       data: {
         coverTitle: this.coverTitle,
-        checkList: this.managePageBreaks(checkList.items.check_list),
+        checkList: this.managePageBreaks(checkList.items.list),
         ...checkList,
       },
       theme: this.travelBook.theme,
@@ -88,8 +86,9 @@ export class FlatYellowFormatter extends AbstractTemplateFormatter {
   formatItinerary(itinerary) {
     return {
       data: {
-        coverTitle: this.coverTitle,
         ...itinerary,
+        coverTitle: this.coverTitle,
+        steps: itinerary.items.list,
       },
       theme: this.travelBook.theme,
     };
@@ -97,7 +96,7 @@ export class FlatYellowFormatter extends AbstractTemplateFormatter {
 
   formatAccommodations(accommodations) {
     const formattedAccommodations = this.managePageBreaks(
-      accommodations.items.accommodations,
+      accommodations.items.list,
     );
     return {
       data: {

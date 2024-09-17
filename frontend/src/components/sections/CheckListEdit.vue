@@ -17,7 +17,7 @@
       <SectionItemsTable
         class="q-mt-md"
         title="Check-list"
-        :rows="section.items.check_list"
+        :rows="section.items.list"
         :columns="columns"
         no-data-label="Cliquez sur le bouton + pour ajouter un élément à la liste"
         @add="openAddCheckListItemModal"
@@ -155,8 +155,8 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          check_list: [
-            ...this.section.items.check_list,
+          list: [
+            ...this.section.items.list,
             {
               title: '',
               content: '',
@@ -164,13 +164,13 @@ export default {
           ],
         },
       });
-      this.openEditCheckListItemModal(this.section.items.check_list.length - 1);
+      this.openEditCheckListItemModal(this.section.items.list.length - 1);
     },
     openEditCheckListItemModal(rowIndex) {
       this.$modals.open('EditCheckListItemModal', {
         props: {
           title: 'Modifier un element de la liste',
-          information: this.section.items.check_list[rowIndex],
+          information: this.section.items.list[rowIndex],
         },
         events: {
           submit: (data) => this.updateCheckListItem(rowIndex, data),
@@ -182,7 +182,7 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          check_list: this.section.items.check_list.map((item, index) => {
+          list: this.section.items.list.map((item, index) => {
             if (index === rowIndex) {
               return data;
             }
@@ -196,7 +196,7 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          check_list: this.section.items.check_list.filter((_, index) => index !== rowIndex),
+          list: this.section.items.list.filter((_, index) => index !== rowIndex),
         },
       });
     },
@@ -211,8 +211,8 @@ export default {
               ...this.section,
               items: {
                 ...this.section.items,
-                check_list: [
-                  ...this.section.items.check_list,
+                list: [
+                  ...this.section.items.list,
                   {
                     ...data.content,
                     module_id: data.id,

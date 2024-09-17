@@ -17,7 +17,7 @@
       <SectionItemsTable
         class="q-mt-md"
         title="Informations"
-        :rows="section.items.informations"
+        :rows="section.items.list"
         :columns="columns"
         no-data-label="Cliquez sur le bouton + pour ajouter une information"
         @add="openAddInformationModal"
@@ -180,8 +180,8 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          informations: [
-            ...this.section.items.informations,
+          list: [
+            ...this.section.items.list,
             {
               title: '',
               content: '',
@@ -190,13 +190,13 @@ export default {
           ],
         },
       });
-      this.openEditInformationModal(this.section.items.informations.length - 1);
+      this.openEditInformationModal(this.section.items.list.length - 1);
     },
     openEditInformationModal(rowIndex) {
       this.$modals.open('EditInformationModal', {
         props: {
           title: 'Modifier une information',
-          information: this.section.items.informations[rowIndex],
+          information: this.section.items.list[rowIndex],
         },
         events: {
           submit: (data) => this.updateInformation(rowIndex, data),
@@ -208,7 +208,7 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          informations: this.section.items.informations.map((information, index) => {
+          list: this.section.items.list.map((information, index) => {
             if (index === rowIndex) {
               return data;
             }
@@ -222,7 +222,7 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          informations: this.section.items.informations.filter((_, index) => index !== rowIndex),
+          list: this.section.items.list.filter((_, index) => index !== rowIndex),
         },
       });
     },
@@ -237,8 +237,8 @@ export default {
               ...this.section,
               items: {
                 ...this.section.items,
-                informations: [
-                  ...this.section.items.informations,
+                list: [
+                  ...this.section.items.list,
                   {
                     ...data.content,
                     module_id: data.id,

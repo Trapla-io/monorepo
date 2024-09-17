@@ -75,8 +75,8 @@ export default {
           saveFromExisting: true,
         },
         events: {
-          submit: (newModule) => {
-            this.modulesStore.create({
+          submit: async (newModule) => {
+            const createdModule = await this.modulesStore.create({
               ...newModule,
               title: newModule.content.title,
               tag_ids: newModule.tags?.map(tag => tag.id),
@@ -85,6 +85,8 @@ export default {
               message: 'Module créé avec succès',
               color: 'positive',
             });
+            this.form.module_id = createdModule.id;
+            this.$emit('submit', this.form);
           },
         }
       });

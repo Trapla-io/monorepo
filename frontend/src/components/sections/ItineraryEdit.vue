@@ -17,7 +17,7 @@
       <SectionItemsTable
         class="q-mt-md"
         title="Étapes"
-        :rows="section.items.steps"
+        :rows="section.items.list"
         :columns="columns"
         no-data-label="Cliquez sur le bouton + pour ajouter une étape"
         @add="openAddStepModal"
@@ -208,8 +208,8 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          steps: [
-            ...this.section.items.steps,
+          list: [
+            ...this.section.items.list,
             {
               title: '',
               content: '',
@@ -218,13 +218,13 @@ export default {
           ],
         },
       });
-      this.openEditStepModal(this.section.items.steps.length - 1);
+      this.openEditStepModal(this.section.items.list.length - 1);
     },
     openEditStepModal(rowIndex) {
       this.$modals.open('EditStepModal', {
         props: {
           title: 'Modifier une étape',
-          step: this.section.items.steps[rowIndex],
+          step: this.section.items.list[rowIndex],
         },
         events: {
           submit: (data) => this.updateStep(rowIndex, data),
@@ -236,7 +236,7 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          steps: this.section.items.steps.map((step, index) => {
+          list: this.section.items.list.map((step, index) => {
             if (index === rowIndex) {
               return data;
             }
@@ -250,7 +250,7 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          steps: this.section.items.steps.filter((_, index) => index !== rowIndex),
+          list: this.section.items.list.filter((_, index) => index !== rowIndex),
         },
       });
     },
@@ -265,8 +265,8 @@ export default {
               ...this.section,
               items: {
                 ...this.section.items,
-                steps: [
-                  ...this.section.items.steps,
+                list: [
+                  ...this.section.items.list,
                   {
                     ...data.content,
                     module_id: data.id,

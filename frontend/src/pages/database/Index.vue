@@ -116,7 +116,6 @@ export default {
       });
     },
     openEditModuleModal(databaseModule) {
-      console.log(databaseModule);
       this.$modals.open('EditModuleModal', {
         props: {
           databaseModule: databaseModule,

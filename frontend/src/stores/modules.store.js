@@ -23,6 +23,7 @@ export const useModulesStore = defineStore('modules', {
       const response = await api.post('/database-modules', newModule);
 
       this.modules.push(response.data);
+      return response.data;
     },
     async update(updatedModule) {
       const response = await api.put(`/database-modules/${updatedModule.id}`, updatedModule);

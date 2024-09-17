@@ -3,6 +3,7 @@ import { CreateDatabaseModuleDto } from './dto/create-database_module.dto';
 import { UpdateDatabaseModuleDto } from './dto/update-database_module.dto';
 import { User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { SyncDatabaseModuleDto } from './dto/sync-database_module.dto';
 
 @Injectable()
 export class DatabaseModulesService {
@@ -66,7 +67,6 @@ export class DatabaseModulesService {
         },
       });
     } catch (error) {
-      console.log(error);
       if (error.code === 'P2025') {
         throw new NotFoundException('DatabaseModule not found');
       } else {
@@ -89,6 +89,48 @@ export class DatabaseModulesService {
       } else {
         throw error;
       }
+    }
+  }
+
+  async sync(user: User, dto: SyncDatabaseModuleDto) {
+    try {
+      const sections = await this.prisma.section.findMany({
+        where: {
+          OR: [
+            { tag: 'useful-informations' },
+            { tag: 'check-list' },
+            { tag: 'itinerary' },
+            { tag: 'accommodations' },
+            { tag: 'transports' },
+          ],
+          travel_book: {
+            user_id: user.id,
+          },
+        },
+      });
+
+      for (const section of sections as any) {
+        if (section.items.list.find(e => e.module_id === dto.id)) {
+          const newItemsList = section.items.list.map(e => {
+            if (e.module_id === dto.id) {
+              return { ...dto.content, module_id: dto.id };
+            }
+            return e;
+          });
+
+          await this.prisma.section.update({
+            where: { id: section.id },
+            data: {
+              items: {
+                ...section.items,
+                list: newItemsList,
+              },
+            },
+          });
+        }
+      }
+    } catch (error) {
+      throw error;
     }
   }
 }

@@ -17,7 +17,7 @@
       <SectionItemsTable
         class="q-mt-md"
         title="Hébergements"
-        :rows="section.items.accommodations"
+        :rows="section.items.list"
         :columns="columns"
         no-data-label="Cliquez sur le bouton + pour ajouter un hébergement"
         @add="openAddAccommodationModal"
@@ -222,8 +222,8 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          accommodations: [
-            ...this.section.items.accommodations,
+          list: [
+            ...this.section.items.list,
             {
               title: '',
               description: '',
@@ -235,13 +235,13 @@ export default {
           ],
         },
       });
-      this.openEditAccommodationModal(this.section.items.accommodations.length - 1);
+      this.openEditAccommodationModal(this.section.items.list.length - 1);
     },
     openEditAccommodationModal(rowIndex) {
       this.$modals.open('EditAccommodationModal', {
         props: {
           title: 'Modifier un hébergement',
-          accommodation: this.section.items.accommodations[rowIndex],
+          accommodation: this.section.items.list[rowIndex],
         },
         events: {
           submit: (data) => this.updateAccommodation(rowIndex, data),
@@ -253,7 +253,7 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          accommodations: this.section.items.accommodations.map((accommodation, index) => {
+          list: this.section.items.list.map((accommodation, index) => {
             if (index === rowIndex) {
               return data;
             }
@@ -267,7 +267,7 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          accommodations: this.section.items.accommodations.filter((_, index) => index !== rowIndex),
+          list: this.section.items.list.filter((_, index) => index !== rowIndex),
         },
       });
     },
@@ -282,8 +282,8 @@ export default {
               ...this.section,
               items: {
                 ...this.section.items,
-                accommodations: [
-                  ...this.section.items.accommodations,
+                list: [
+                  ...this.section.items.list,
                   {
                     ...data.content,
                     module_id: data.id,

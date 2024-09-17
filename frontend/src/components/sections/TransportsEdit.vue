@@ -17,7 +17,7 @@
       <SectionItemsTable
         class="q-mt-md"
         title="Trajets"
-        :rows="section.items.routes"
+        :rows="section.items.list"
         :columns="columns"
         no-data-label="Cliquez sur le bouton + pour ajouter un trajet."
         @add="openAddRouteModal"
@@ -132,7 +132,7 @@ export default {
   },
   methods: {
     getProgressValue(routeIndex) {
-      const route = this.section.items.routes[routeIndex];
+      const route = this.section.items.list[routeIndex];
       return Object.values(route).filter(e => e).length / Object.keys(route).length;
     },
     async updateSection() {
@@ -150,8 +150,8 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          routes: [
-            ...this.section.items.routes,
+          list: [
+            ...this.section.items.list,
             {
               title: null,
               company: null,
@@ -168,12 +168,12 @@ export default {
           ],
         },
       });
-      this.openEditRouteModal(this.section.items.routes.length - 1);
+      this.openEditRouteModal(this.section.items.list.length - 1);
     },
     openEditRouteModal(routeIndex) {
       this.$modals.open('EditRouteModal', {
         props: {
-          route: this.section.items.routes[routeIndex],
+          route: this.section.items.list[routeIndex],
         },
         events: {
           submit: (data) => this.updateRoute(routeIndex, data),
@@ -181,26 +181,26 @@ export default {
       });
     },
     async updateRoute(routeIndex, data) {
-      const routes = [...this.section.items.routes];
+      const routes = [...this.section.items.list];
       routes[routeIndex] = data;
 
       await this.travelBooksStore.updateCurrentTravelBookSection({
         ...this.section,
         items: {
           ...this.section.items,
-          routes,
+          list: routes,
         },
       });
     },
     async deleteRoute(routeIndex) {
-      const routes = [...this.section.items.routes];
+      const routes = [...this.section.items.list];
       routes.splice(routeIndex, 1);
 
       await this.travelBooksStore.updateCurrentTravelBookSection({
         ...this.section,
         items: {
           ...this.section.items,
-          routes,
+          list: routes,
         },
       });
     },
@@ -215,8 +215,8 @@ export default {
               ...this.section,
               items: {
                 ...this.section.items,
-                routes: [
-                  ...this.section.items.routes,
+                list: [
+                  ...this.section.items.list,
                   {
                     ...data.content,
                     module_id: data.id,

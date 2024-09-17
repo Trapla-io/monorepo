@@ -5,6 +5,7 @@ import { UpdateDatabaseModuleDto } from './dto/update-database_module.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { GetUser } from '../auth/decorators/get-user-decorator';
 import { User } from '@prisma/client';
+import { SyncDatabaseModuleDto } from './dto/sync-database_module.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('database-modules')
@@ -34,5 +35,10 @@ export class DatabaseModulesController {
   @Delete(':id')
   remove(@Param('id') id: string, @GetUser() user: User) {
     return this.databaseModulesService.remove(+id, user);
+  }
+
+  @Post('sync')
+  sync(@GetUser() user: User, @Body() dto: SyncDatabaseModuleDto) {
+    return this.databaseModulesService.sync(user, dto);
   }
 }
