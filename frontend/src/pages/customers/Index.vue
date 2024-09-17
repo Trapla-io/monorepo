@@ -18,6 +18,7 @@
       :rows="fileteredCustomers"
       :columns="columns"
       :loading="loading"
+      :pagination="{ rowsPerPage: 25 }"
       row-key="id"
       no-data-label="Aucun client. Ajoutez-en un avec le bouton ci-dessus."
       flat

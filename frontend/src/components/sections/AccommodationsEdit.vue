@@ -21,6 +21,7 @@
         :columns="columns"
         no-data-label="Cliquez sur le bouton + pour ajouter un hébergement"
         @add="openAddAccommodationModal"
+        @pick-module="openModulePickerModal"
       >
         <template #body-cell-description="props">
           <QTd
@@ -267,6 +268,30 @@ export default {
         items: {
           ...this.section.items,
           accommodations: this.section.items.accommodations.filter((_, index) => index !== rowIndex),
+        },
+      });
+    },
+    openModulePickerModal() {
+      this.$modals.open('ModulePickerModal', {
+        props: {
+          type: 'accommodation',
+        },
+        events: {
+          submit: (data) => {
+            this.travelBooksStore.updateCurrentTravelBookSection({
+              ...this.section,
+              items: {
+                ...this.section.items,
+                accommodations: [
+                  ...this.section.items.accommodations,
+                  {
+                    ...data.content,
+                    module_id: data.id,
+                  },
+                ],
+              },
+            });
+          },
         },
       });
     },

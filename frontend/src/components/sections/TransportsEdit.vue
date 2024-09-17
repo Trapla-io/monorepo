@@ -21,6 +21,7 @@
         :columns="columns"
         no-data-label="Cliquez sur le bouton + pour ajouter un trajet."
         @add="openAddRouteModal"
+        @pick-module="openModulePickerModal"
       >
         <template #body-cell-content="props">
           <QTd
@@ -200,6 +201,30 @@ export default {
         items: {
           ...this.section.items,
           routes,
+        },
+      });
+    },
+    openModulePickerModal() {
+      this.$modals.open('ModulePickerModal', {
+        props: {
+          type: 'route',
+        },
+        events: {
+          submit: (data) => {
+            this.travelBooksStore.updateCurrentTravelBookSection({
+              ...this.section,
+              items: {
+                ...this.section.items,
+                routes: [
+                  ...this.section.items.routes,
+                  {
+                    ...data.content,
+                    module_id: data.id,
+                  },
+                ],
+              },
+            });
+          },
         },
       });
     },

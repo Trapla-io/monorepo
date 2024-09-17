@@ -5,13 +5,12 @@
     size="fit-screen"
   >
     <div
-      v-if="!databaseModules"
+      v-if="!databaseModules || !databaseModules.length"
       class="q-pa-xl text-center"
     >
-      <h6>Aucun module disponible</h6>
+      <h6>Aucun module <i>{{ moduleLabelFromType }}</i> disponible</h6>
       <p>
-        Pour pouvoir utiliser cette fonctionnalité il vous faut créer des modules. <br>
-        Rendez vous sur la page <strong>Base de donnée</strong> afin de créer un module.
+        Rendez vous sur la page <strong>Base de donnée</strong> afin de créer un module <i>{{ moduleLabelFromType }}</i>.
       </p>
       <BButton
         :to="{ name: 'DatabaseIndex' }"
@@ -31,11 +30,12 @@
           :disabled="!selectedModule"
         />
       </div>
-      <div class="row justify-between">
+      <div class="row justify-between q-mt-md ">
         <QList
-          class="q-mt-md col-6"
+          class="col-6"
           bordered
           separator
+          style="max-height: 400px;"
         >
           <QItem
             v-for="databaseModule in databaseModules"
@@ -64,8 +64,10 @@
         <div
           v-if="selectedModule"
           class="col-5"
+          style="max-height: 400px; overflow: scroll; box-shadow: inset 0 -12px 8px -8px grey;"
         >
           <component
+            ref="modulePreview"
             class="module-preview"
             :is="componentFromType"
             v-model="selectedModule.content"
@@ -80,13 +82,20 @@
 import { mapStores } from 'pinia';
 import BModal from 'src/components/base/BModal.vue';
 import SelectModuleTags from 'src/components/SelectModuleTags.vue';
+import SelectModuleType from 'src/components/SelectModuleType.vue';
 import { DATABASE_MODULES_INFORMATION } from 'src/helpers/databaseModules';
 import { useModulesStore } from 'src/stores/modules.store';
 
 export default {
   name: 'ModulePickerModal',
-  components: { BModal, SelectModuleTags },
+  components: { BModal, SelectModuleTags, SelectModuleType },
   emits: ['submit'],
+  props: {
+    type: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       databaseModules: null,
@@ -101,9 +110,13 @@ export default {
     componentFromType() {
       return DATABASE_MODULES_INFORMATION.find(databaseModule => databaseModule.name === this.selectedModule.type)?.formComponent;
     },
+    moduleLabelFromType() {
+      return DATABASE_MODULES_INFORMATION.find(databaseModule => databaseModule.name === this.type)?.label;
+    },
   },
   async mounted() {
-    this.databaseModules = await this.modulesStore.getOrLoad;
+    const modules = await this.modulesStore.getOrLoad;
+    this.databaseModules = modules.filter(m => m.type === this.type);
   },
   methods: {
     submit() {

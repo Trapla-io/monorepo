@@ -13,18 +13,6 @@
       <BImagePicker
         v-model="computedImage"
       />
-      <!-- <QUploader
-        class="full-width"
-        :ref="'uploader'"
-        label="Importez une image"
-        text-color="white"
-        accept=".jpg, image/*"
-        @added="computedImage = $event"
-        @removed="computedImage = [null]"
-        hide-upload-btn
-        bordered
-        flat
-      /> -->
 
       <SectionItemsTable
         class="q-mt-md"
@@ -33,6 +21,7 @@
         :columns="columns"
         no-data-label="Cliquez sur le bouton + pour ajouter un élément à la liste"
         @add="openAddCheckListItemModal"
+        @pick-module="openModulePickerModal"
       >
         <template #body-cell-content="props">
           <QTd
@@ -208,6 +197,30 @@ export default {
         items: {
           ...this.section.items,
           check_list: this.section.items.check_list.filter((_, index) => index !== rowIndex),
+        },
+      });
+    },
+    openModulePickerModal() {
+      this.$modals.open('ModulePickerModal', {
+        props: {
+          type: 'check-list-items',
+        },
+        events: {
+          submit: (data) => {
+            this.travelBooksStore.updateCurrentTravelBookSection({
+              ...this.section,
+              items: {
+                ...this.section.items,
+                check_list: [
+                  ...this.section.items.check_list,
+                  {
+                    ...data.content,
+                    module_id: data.id,
+                  },
+                ],
+              },
+            });
+          },
         },
       });
     },

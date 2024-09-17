@@ -10,6 +10,13 @@
         align="right"
         class="q-mt-xl q-pr-none"
     >
+      <QBtn
+        label="Sauvegarder comme module"
+        icon-right="eva-save-outline"
+        color="purple-8"
+        outline
+        @click="openCreateModuleModal"
+      />
       <BButton
         label="Appliquer"
         @click="submit"
@@ -18,8 +25,11 @@
   </BModal>
 </template>
 <script>
+import { mapStores } from 'pinia';
+import { Notify } from 'quasar';
 import BModal from 'src/components/base/BModal.vue';
 import CheckListItemForm from 'src/components/forms/CheckListItemForm.vue';
+import { useModulesStore } from 'src/stores/modules.store';
 
 export default {
   name: 'EditCheckListItemModal',
@@ -39,6 +49,9 @@ export default {
       form: {},
     };
   },
+  computed: {
+    ...mapStores(useModulesStore)
+  },
   mounted() {
     this.form = {...this.information};
   },
@@ -46,6 +59,30 @@ export default {
     submit() {
       this.$emit('submit', this.form);
       this.$modals.close('EditCheckListItemModal');
+    },
+    openCreateModuleModal() {
+      this.$modals.open('EditModuleModal', {
+        props: {
+          databaseModule: {
+            content: this.form,
+            type: 'check-list-items',
+          },
+          saveFromExisting: true,
+        },
+        events: {
+          submit: (newModule) => {
+            this.modulesStore.create({
+              ...newModule,
+              title: newModule.content.title,
+              tag_ids: newModule.tags?.map(tag => tag.id),
+            });
+            Notify.create({
+              message: 'Module créé avec succès',
+              color: 'positive',
+            });
+          },
+        }
+      });
     },
   },
 }

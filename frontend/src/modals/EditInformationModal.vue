@@ -79,7 +79,7 @@ export default {
             this.modulesStore.create({
               ...newModule,
               title: newModule.content.title,
-              tag_ids: newModule.tags.map(tag => tag.id),
+              tag_ids: newModule.tags?.map(tag => tag.id),
             });
             Notify.create({
               message: 'Module créé avec succès',

@@ -49,7 +49,6 @@ export default {
   },
   data() {
     return {
-      localValue: this.modelValue,
       hover: false,
     };
   },
@@ -57,11 +56,18 @@ export default {
     computedLabel() {
       return this.multiple ? 'Ajouter des images' : 'Ajouter une image';
     },
+    localValue: {
+      get() {
+        return this.modelValue;
+      },
+      set(value) {
+        this.$emit('update:modelValue', value);
+      }
+    }
   },
   methods: {
     deleteImage() {
       this.localValue = undefined;
-      this.$emit('update:modelValue', undefined);
     },
     openImagePickerModal() {
       this.$modals.open('ImagePickerModal', {
@@ -71,7 +77,6 @@ export default {
         events: {
           picked: (image) => {
             this.localValue = image;
-            this.$emit('update:modelValue', image);
           },
         }
       })

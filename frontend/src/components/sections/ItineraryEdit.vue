@@ -13,18 +13,6 @@
       <BImagePicker
         v-model="computedImage"
       />
-      <!-- <QUploader
-        class="full-width"
-        :ref="'uploader'"
-        label="Importez une image"
-        text-color="white"
-        accept=".jpg, image/*"
-        @added="computedImage = $event"
-        @removed="computedImage = [null]"
-        hide-upload-btn
-        bordered
-        flat
-      /> -->
 
       <SectionItemsTable
         class="q-mt-md"
@@ -33,6 +21,7 @@
         :columns="columns"
         no-data-label="Cliquez sur le bouton + pour ajouter une étape"
         @add="openAddStepModal"
+        @pick-module="openModulePickerModal"
       >
         <template #body-cell-subtitle="props">
           <QTd
@@ -262,6 +251,30 @@ export default {
         items: {
           ...this.section.items,
           steps: this.section.items.steps.filter((_, index) => index !== rowIndex),
+        },
+      });
+    },
+    openModulePickerModal() {
+      this.$modals.open('ModulePickerModal', {
+        props: {
+          type: 'itinerary-step',
+        },
+        events: {
+          submit: (data) => {
+            this.travelBooksStore.updateCurrentTravelBookSection({
+              ...this.section,
+              items: {
+                ...this.section.items,
+                steps: [
+                  ...this.section.items.steps,
+                  {
+                    ...data.content,
+                    module_id: data.id,
+                  },
+                ],
+              },
+            });
+          },
         },
       });
     },

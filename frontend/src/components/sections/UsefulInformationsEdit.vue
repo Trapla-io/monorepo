@@ -13,18 +13,6 @@
       <BImagePicker
         v-model="computedImage"
       />
-      <!-- <QUploader
-        class="full-width"
-        :ref="'uploader'"
-        label="Importez une image"
-        text-color="white"
-        accept=".jpg, image/*"
-        @added="computedImage = $event"
-        @removed="computedImage = [null]"
-        hide-upload-btn
-        bordered
-        flat
-      /> -->
 
       <SectionItemsTable
         class="q-mt-md"
@@ -240,6 +228,9 @@ export default {
     },
     openModulePickerModal() {
       this.$modals.open('ModulePickerModal', {
+        props: {
+          type: 'information',
+        },
         events: {
           submit: (data) => {
             this.travelBooksStore.updateCurrentTravelBookSection({

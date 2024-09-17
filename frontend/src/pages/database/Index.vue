@@ -12,6 +12,7 @@
       :rows="fileteredModules"
       :columns="columns"
       :loading="loading"
+      :pagination="{ rowsPerPage: 25 }"
       row-key="id"
       no-data-label="Aucun module. Ajoutez-en un avec le bouton ci-dessus."
       flat
@@ -41,6 +42,7 @@
 <script>
 import { mapStores } from 'pinia';
 import { date, Notify } from 'quasar';
+import { DATABASE_MODULES_INFORMATION } from 'src/helpers/databaseModules';
 import { useModulesStore } from 'src/stores/modules.store';
 
 export default {
@@ -62,10 +64,12 @@ export default {
           label: 'Type',
           align: 'left',
           field: 'type',
-          style: 'width: 7%'
+          style: 'width: 7%',
+          format: (val) => DATABASE_MODULES_INFORMATION.find(e => e.name === val)?.label
         },
         {
           name: 'updated_at',
+          sortable: true,
           label: 'Dernière modification',
           align: 'center',
           field: 'updated_at',
