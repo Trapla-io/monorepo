@@ -13,7 +13,7 @@
     </div>
     <BButton
       flat
-      icon="edit"
+      icon="eva-edit-outline"
       text-color="dark"
       @click="openThemePickerModal"
     />

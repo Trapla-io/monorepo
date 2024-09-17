@@ -14,23 +14,15 @@
         v-model="computedImage"
       />
 
-      <QTable
+      <SectionItemsTable
         class="q-mt-md"
         title="Trajets"
-        :rows="section.items.routes"
+        :rows="section.items.list"
         :columns="columns"
-        flat
-        bordered
         no-data-label="Cliquez sur le bouton + pour ajouter un trajet."
+        @add="openAddRouteModal"
+        @pick-module="openModulePickerModal"
       >
-      <template #top-right>
-          <BButton
-          @click="openAddRouteModal"
-          size="sm"
-          icon="add"
-          />
-        </template>
-
         <template #body-cell-content="props">
           <QTd
             :props="props"
@@ -54,21 +46,21 @@
           >
             <QBtn
               @click="openEditRouteModal(props.rowIndex)"
-              icon="edit"
+              icon="eva-edit-outline"
               flat
               round
               dense
             />
             <QBtn
               @click="deleteRoute(props.rowIndex)"
-              icon="delete"
+              icon="eva-trash-2-outline"
               flat
               round
               dense
             />
           </QTd>
         </template>
-      </QTable>
+      </SectionItemsTable>
     </div>
   </SectionEditLayout>
 </template>
@@ -78,10 +70,11 @@ import { QLinearProgress } from 'quasar';
 import SectionEditLayout from 'src/layouts/SectionEditLayout.vue';
 import { mapStores } from 'pinia';
 import { useTravelBooksStore } from 'src/stores/travel-books.store';
+import SectionItemsTable from '../SectionItemsTable.vue';
 
 export default {
   name: 'TransportsEdit',
-  components: { SectionEditLayout, QLinearProgress },
+  components: { SectionEditLayout, QLinearProgress, SectionItemsTable },
   props: {
     section: {
       type: Object,
@@ -139,7 +132,7 @@ export default {
   },
   methods: {
     getProgressValue(routeIndex) {
-      const route = this.section.items.routes[routeIndex];
+      const route = this.section.items.list[routeIndex];
       return Object.values(route).filter(e => e).length / Object.keys(route).length;
     },
     async updateSection() {
@@ -157,8 +150,8 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          routes: [
-            ...this.section.items.routes,
+          list: [
+            ...this.section.items.list,
             {
               title: null,
               company: null,
@@ -175,12 +168,12 @@ export default {
           ],
         },
       });
-      this.openEditRouteModal(this.section.items.routes.length - 1);
+      this.openEditRouteModal(this.section.items.list.length - 1);
     },
     openEditRouteModal(routeIndex) {
       this.$modals.open('EditRouteModal', {
         props: {
-          route: this.section.items.routes[routeIndex],
+          route: this.section.items.list[routeIndex],
         },
         events: {
           submit: (data) => this.updateRoute(routeIndex, data),
@@ -188,26 +181,50 @@ export default {
       });
     },
     async updateRoute(routeIndex, data) {
-      const routes = [...this.section.items.routes];
+      const routes = [...this.section.items.list];
       routes[routeIndex] = data;
 
       await this.travelBooksStore.updateCurrentTravelBookSection({
         ...this.section,
         items: {
           ...this.section.items,
-          routes,
+          list: routes,
         },
       });
     },
     async deleteRoute(routeIndex) {
-      const routes = [...this.section.items.routes];
+      const routes = [...this.section.items.list];
       routes.splice(routeIndex, 1);
 
       await this.travelBooksStore.updateCurrentTravelBookSection({
         ...this.section,
         items: {
           ...this.section.items,
-          routes,
+          list: routes,
+        },
+      });
+    },
+    openModulePickerModal() {
+      this.$modals.open('ModulePickerModal', {
+        props: {
+          type: 'route',
+        },
+        events: {
+          submit: (data) => {
+            this.travelBooksStore.updateCurrentTravelBookSection({
+              ...this.section,
+              items: {
+                ...this.section.items,
+                list: [
+                  ...this.section.items.list,
+                  {
+                    ...data.content,
+                    module_id: data.id,
+                  },
+                ],
+              },
+            });
+          },
         },
       });
     },

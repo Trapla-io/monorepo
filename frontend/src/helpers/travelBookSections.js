@@ -19,7 +19,7 @@ const SECTIONS_TEMPLATES = [
     cover_image: null,
     position: 0,
     items: {
-      informations: [],
+      list: [],
     }
   },
   {
@@ -30,7 +30,7 @@ const SECTIONS_TEMPLATES = [
     cover_image: null,
     position: 0,
     items: {
-      check_list: [],
+      list: [],
     }
   },
   {
@@ -41,7 +41,7 @@ const SECTIONS_TEMPLATES = [
     cover_image: null,
     position: 0,
     items: {
-      steps: [],
+      list: [],
     }
   },
   {
@@ -52,7 +52,7 @@ const SECTIONS_TEMPLATES = [
     cover_image: null,
     position: 0,
     items: {
-      accommodations: [],
+      list: [],
     }
   },
   {
@@ -76,7 +76,7 @@ const SECTIONS_TEMPLATES = [
     cover_image: null,
     position: 0,
     items: {
-      routes: [],
+      list: [],
     }
   },
   {

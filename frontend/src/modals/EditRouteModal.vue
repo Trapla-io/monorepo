@@ -3,92 +3,20 @@
     :title="title"
     hide-close
   >
-    <div>
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Titre</p>
-      <BInput
-        v-model="form.title"
-      />
-      <div class="row items-center q-mt-md">
-        <div class="col">
-          <p class="text-subtitle1 q-ma-none text-grey-6">Compagnie</p>
-          <BInput
-            v-model="form.company"
-          />
-        </div>
-        <div class="col-4 q-ml-md">
-          <p class="text-subtitle1 q-ma-none text-grey-6">Prix</p>
-          <BInput
-            type="number"
-            placeholder="000"
-            v-model="form.price"
-          />
-        </div>
-      </div>
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Description</p>
-      <BInput
-        type="textarea"
-        v-model="form.description"
-      />
-      <div class="q-mt-md">
-        <h6>Départ</h6>
-        <div class="row items-center">
-          <div class="col">
-            <p class="text-subtitle1 q-ma-none text-grey-6">Lieu</p>
-            <BInput
-              v-model="form.departure_location"
-            />
-          </div>
-          <div class="col-3 q-ml-md">
-            <p class="text-subtitle1 q-ma-none text-grey-6">Date</p>
-            <BDatePicker
-              v-model="form.departure_date"
-            />
-          </div>
-          <div class="q-ml-md col-2">
-            <p class="text-subtitle1 q-ma-none text-grey-6">Heure</p>
-            <BInput
-              mask="##h##"
-              v-model="form.departure_hour"
-              placeholder="00h00"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="q-mt-md">
-        <h6>Arrivée</h6>
-        <div class="row items-center">
-          <div class="col">
-            <p class="text-subtitle1 q-ma-none text-grey-6">Lieu</p>
-            <BInput
-              v-model="form.arrival_location"
-            />
-          </div>
-          <div class="col-3 q-ml-md">
-            <p class="text-subtitle1 q-ma-none text-grey-6">Date</p>
-            <BDatePicker
-              v-model="form.arrival_date"
-            />
-          </div>
-          <div class="q-ml-md col-2">
-            <p class="text-subtitle1 q-ma-none text-grey-6">Heure</p>
-            <BInput
-              mask="##h##"
-              v-model="form.arrival_hour"
-              placeholder="00h00"
-            />
-          </div>
-        </div>
-      </div>
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Lien</p>
-      <BInput
-        placeholder="https://"
-        v-model="form.link"
-      />
-    </div>
+    <RouteForm
+      v-model="form"
+    />
     <QCardActions
       align="right"
       class="q-mt-xl q-pr-none"
     >
+      <QBtn
+        label="Sauvegarder comme module"
+        icon-right="eva-save-outline"
+        color="purple-8"
+        outline
+        @click="openCreateModuleModal"
+      />
     <BButton
       label="Appliquer"
       @click="submit"
@@ -98,10 +26,14 @@
 </template>
 
 <script>
+import { mapStores } from 'pinia';
+import { Notify } from 'quasar';
 import BModal from 'src/components/base/BModal.vue';
+import RouteForm from 'src/components/forms/RouteForm.vue';
+import { useModulesStore } from 'src/stores/modules.store';
 export default {
   name: 'EditRouteModal',
-  components: { BModal },
+  components: { BModal, RouteForm },
   props: {
     title: {
       type: String,
@@ -117,6 +49,9 @@ export default {
       form: {},
     };
   },
+  computed: {
+    ...mapStores(useModulesStore),
+  },
   mounted() {
     this.form = { ...this.route };
   },
@@ -124,6 +59,32 @@ export default {
     submit() {
       this.$emit('submit', this.form);
       this.$modals.close('EditRouteModal');
+    },
+    openCreateModuleModal() {
+      this.$modals.open('EditModuleModal', {
+        props: {
+          databaseModule: {
+            content: this.form,
+            type: 'route',
+          },
+          saveFromExisting: true,
+        },
+        events: {
+          submit: async (newModule) => {
+            const createdModule = await this.modulesStore.create({
+              ...newModule,
+              title: newModule.content.title,
+              tag_ids: newModule.tags?.map(tag => tag.id),
+            });
+            Notify.create({
+              message: 'Module créé avec succès',
+              color: 'positive',
+            });
+            this.form.module_id = createdModule.id;
+            this.$emit('submit', this.form);
+          },
+        }
+      });
     },
   },
 }

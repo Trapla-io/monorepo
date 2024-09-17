@@ -13,36 +13,16 @@
       <BImagePicker
         v-model="computedImage"
       />
-      <!-- <QUploader
-        class="full-width"
-        :ref="'uploader'"
-        label="Importez une image"
-        text-color="white"
-        accept=".jpg, image/*"
-        @added="computedImage = $event"
-        @removed="computedImage = [null]"
-        hide-upload-btn
-        bordered
-        flat
-      /> -->
 
-      <QTable
+      <SectionItemsTable
         class="q-mt-md"
         title="Informations"
-        :rows="section.items.informations"
+        :rows="section.items.list"
         :columns="columns"
-        flat
-        bordered
         no-data-label="Cliquez sur le bouton + pour ajouter une information"
+        @add="openAddInformationModal"
+        @pick-module="openModulePickerModal"
       >
-        <template #top-right>
-          <BButton
-          @click="openAddInformationModal"
-          size="sm"
-          icon="add"
-          />
-        </template>
-
         <template #body-cell-content="props">
           <QTd
             :props="props"
@@ -87,21 +67,21 @@
           >
             <QBtn
               @click="openEditInformationModal(props.rowIndex)"
-              icon="edit"
+              icon="eva-edit-outline"
               flat
               round
               dense
             />
             <QBtn
               @click="deleteInformation(props.rowIndex)"
-              icon="delete"
+              icon="eva-trash-2-outline"
               flat
               round
               dense
             />
           </QTd>
         </template>
-      </QTable>
+      </SectionItemsTable>
     </div>
   </SectionEditLayout>
 </template>
@@ -109,10 +89,10 @@
 import SectionEditLayout from 'src/layouts/SectionEditLayout.vue';
 import { useTravelBooksStore } from 'src/stores/travel-books.store';
 import { mapStores } from 'pinia';
-import { QTable } from 'quasar';
+import SectionItemsTable from '../SectionItemsTable.vue';
 
 export default {
-  components: { SectionEditLayout, QTable },
+  components: { SectionEditLayout, SectionItemsTable },
   props: {
     section: {
       type: Object,
@@ -200,8 +180,8 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          informations: [
-            ...this.section.items.informations,
+          list: [
+            ...this.section.items.list,
             {
               title: '',
               content: '',
@@ -210,13 +190,13 @@ export default {
           ],
         },
       });
-      this.openEditInformationModal(this.section.items.informations.length - 1);
+      this.openEditInformationModal(this.section.items.list.length - 1);
     },
     openEditInformationModal(rowIndex) {
       this.$modals.open('EditInformationModal', {
         props: {
           title: 'Modifier une information',
-          information: this.section.items.informations[rowIndex],
+          information: this.section.items.list[rowIndex],
         },
         events: {
           submit: (data) => this.updateInformation(rowIndex, data),
@@ -228,7 +208,7 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          informations: this.section.items.informations.map((information, index) => {
+          list: this.section.items.list.map((information, index) => {
             if (index === rowIndex) {
               return data;
             }
@@ -242,7 +222,31 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          informations: this.section.items.informations.filter((_, index) => index !== rowIndex),
+          list: this.section.items.list.filter((_, index) => index !== rowIndex),
+        },
+      });
+    },
+    openModulePickerModal() {
+      this.$modals.open('ModulePickerModal', {
+        props: {
+          type: 'information',
+        },
+        events: {
+          submit: (data) => {
+            this.travelBooksStore.updateCurrentTravelBookSection({
+              ...this.section,
+              items: {
+                ...this.section.items,
+                list: [
+                  ...this.section.items.list,
+                  {
+                    ...data.content,
+                    module_id: data.id,
+                  },
+                ],
+              },
+            });
+          },
         },
       });
     },

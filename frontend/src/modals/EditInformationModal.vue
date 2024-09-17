@@ -3,36 +3,20 @@
     :title="title"
     hideClose
   >
-    <div>
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Titre</p>
-      <BInput
-        v-model="form.title"
-      />
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Contenu</p>
-      <BInput
-        v-model="form.content"
-        type="textarea"
-      />
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Image</p>
-      <BImagePicker
-        v-model="computedImage"
-      />
-      <!-- <QUploader
-        class="full-width"
-        ref="modalUploader"
-        label="Importez une image"
-        text-color="white"
-        accept=".jpg, image/*"
-        @added="computedImage = $event"
-        hide-upload-btn
-        bordered
-        flat
-      /> -->
-    </div>
+    <InformationForm
+      v-model="form"
+    />
     <QCardActions
         align="right"
         class="q-mt-xl q-pr-none"
     >
+      <QBtn
+        label="Sauvegarder comme module"
+        icon-right="eva-save-outline"
+        color="purple-8"
+        outline
+        @click="openCreateModuleModal"
+      />
       <BButton
         label="Appliquer"
         @click="submit"
@@ -41,12 +25,15 @@
   </BModal>
 </template>
 <script>
-import BInput from 'src/components/base/BInput.vue';
+import { mapStores } from 'pinia';
+import { Notify } from 'quasar';
 import BModal from 'src/components/base/BModal.vue';
+import InformationForm from 'src/components/forms/InformationForm.vue';
+import { useModulesStore } from 'src/stores/modules.store';
 
 export default {
   name: 'EditInformationModal',
-  components: { BModal, BInput },
+  components: { BModal, InformationForm },
   props: {
     title: {
       type: String,
@@ -63,21 +50,10 @@ export default {
     };
   },
   computed: {
-    computedImage: {
-      get() {
-        return this.form.image;
-      },
-      set(value) {
-        this.form.image = value;
-      },
-    },
+    ...mapStores(useModulesStore)
   },
   mounted() {
     this.form = {...this.information};
-
-    this.$nextTick(() => {
-      // this.setImageInUploader();
-    });
   },
   methods: {
     setImageInUploader() {
@@ -88,6 +64,32 @@ export default {
     submit() {
       this.$emit('submit', this.form);
       this.$modals.close('EditInformationModal');
+    },
+    openCreateModuleModal() {
+      this.$modals.open('EditModuleModal', {
+        props: {
+          databaseModule: {
+            content: this.form,
+            type: 'information',
+          },
+          saveFromExisting: true,
+        },
+        events: {
+          submit: async (newModule) => {
+            const createdModule = await this.modulesStore.create({
+              ...newModule,
+              title: newModule.content.title,
+              tag_ids: newModule.tags?.map(tag => tag.id),
+            });
+            Notify.create({
+              message: 'Module créé avec succès',
+              color: 'positive',
+            });
+            this.form.module_id = createdModule.id;
+            this.$emit('submit', this.form);
+          },
+        }
+      });
     },
   },
 }

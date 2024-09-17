@@ -14,23 +14,15 @@
         v-model="computedImage"
       />
 
-      <QTable
+      <SectionItemsTable
         class="q-mt-md"
         title="Hébergements"
-        :rows="section.items.accommodations"
+        :rows="section.items.list"
         :columns="columns"
-        flat
-        bordered
         no-data-label="Cliquez sur le bouton + pour ajouter un hébergement"
+        @add="openAddAccommodationModal"
+        @pick-module="openModulePickerModal"
       >
-        <template #top-right>
-          <BButton
-            @click="openAddAccommodationModal"
-            size="sm"
-            icon="add"
-          />
-        </template>
-
         <template #body-cell-description="props">
           <QTd
             :props="props"
@@ -113,21 +105,21 @@
           >
             <QBtn
               @click="openEditAccommodationModal(props.rowIndex)"
-              icon="edit"
+              icon="eva-edit-outline"
               flat
               round
               dense
             />
             <QBtn
               @click="deleteAccommodation(props.rowIndex)"
-              icon="delete"
+              icon="eva-trash-2-outline"
               flat
               round
               dense
             />
           </QTd>
         </template>
-      </QTable>
+      </SectionItemsTable>
     </div>
   </SectionEditLayout>
 </template>
@@ -136,10 +128,11 @@
 import SectionEditLayout from 'src/layouts/SectionEditLayout.vue';
 import { useTravelBooksStore } from 'src/stores/travel-books.store';
 import { mapStores } from 'pinia';
+import SectionItemsTable from '../SectionItemsTable.vue';
 
 export default {
   name: 'SectionAccommodationsEdit',
-  components: { SectionEditLayout },
+  components: { SectionEditLayout, SectionItemsTable },
   props: {
     section: {
       type: Object,
@@ -229,8 +222,8 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          accommodations: [
-            ...this.section.items.accommodations,
+          list: [
+            ...this.section.items.list,
             {
               title: '',
               description: '',
@@ -242,13 +235,13 @@ export default {
           ],
         },
       });
-      this.openEditAccommodationModal(this.section.items.accommodations.length - 1);
+      this.openEditAccommodationModal(this.section.items.list.length - 1);
     },
     openEditAccommodationModal(rowIndex) {
       this.$modals.open('EditAccommodationModal', {
         props: {
           title: 'Modifier un hébergement',
-          accommodation: this.section.items.accommodations[rowIndex],
+          accommodation: this.section.items.list[rowIndex],
         },
         events: {
           submit: (data) => this.updateAccommodation(rowIndex, data),
@@ -260,7 +253,7 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          accommodations: this.section.items.accommodations.map((accommodation, index) => {
+          list: this.section.items.list.map((accommodation, index) => {
             if (index === rowIndex) {
               return data;
             }
@@ -274,7 +267,31 @@ export default {
         ...this.section,
         items: {
           ...this.section.items,
-          accommodations: this.section.items.accommodations.filter((_, index) => index !== rowIndex),
+          list: this.section.items.list.filter((_, index) => index !== rowIndex),
+        },
+      });
+    },
+    openModulePickerModal() {
+      this.$modals.open('ModulePickerModal', {
+        props: {
+          type: 'accommodation',
+        },
+        events: {
+          submit: (data) => {
+            this.travelBooksStore.updateCurrentTravelBookSection({
+              ...this.section,
+              items: {
+                ...this.section.items,
+                list: [
+                  ...this.section.items.list,
+                  {
+                    ...data.content,
+                    module_id: data.id,
+                  },
+                ],
+              },
+            });
+          },
         },
       });
     },

@@ -40,6 +40,11 @@ const routes = [
         path: 'customers',
         component: () => import('pages/customers/Index.vue'),
       },
+      {
+        name: 'DatabaseIndex',
+        path: 'database',
+        component: () => import('pages/database/Index.vue'),
+      }
     ]
   },
 

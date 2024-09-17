@@ -3,31 +3,20 @@
     :title="title"
     hide-close
   >
-    <div>
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Titre</p>
-      <BInput
-        v-model="form.title"
-      />
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Sous-titre</p>
-      <BInput
-        v-model="form.subtitle"
-      />
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Contenu</p>
-      <QEditor
-        v-model="form.content"
-        label="Contenu"
-        filled
-        dense
-      />
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Image</p>
-      <BImagePicker
-        v-model="computedImage"
-      />
-    </div>
+    <StepForm
+      v-model="form"
+    />
     <QCardActions
         align="right"
         class="q-mt-xl q-pr-none"
     >
+      <QBtn
+        label="Sauvegarder comme module"
+        icon-right="eva-save-outline"
+        color="purple-8"
+        outline
+        @click="openCreateModuleModal"
+      />
       <BButton
         label="Appliquer"
         @click="submit"
@@ -36,13 +25,15 @@
   </BModal>
 </template>
 <script>
-import { QEditor } from 'quasar';
-import BInput from 'src/components/base/BInput.vue';
+import { mapStores } from 'pinia';
+import { Notify } from 'quasar';
 import BModal from 'src/components/base/BModal.vue';
+import StepForm from 'src/components/forms/StepForm.vue';
+import { useModulesStore } from 'src/stores/modules.store';
 
 export default {
   name: 'EditStepModal',
-  components: { BModal, BInput, QEditor },
+  components: { BModal, StepForm },
   props: {
     title: {
       type: String,
@@ -59,14 +50,7 @@ export default {
     };
   },
   computed: {
-    computedImage: {
-      get() {
-        return this.form.image;
-      },
-      set(value) {
-        this.form.image = value;
-      },
-    },
+    ...mapStores(useModulesStore)
   },
   mounted() {
     this.form = {...this.step};
@@ -75,6 +59,32 @@ export default {
     submit() {
       this.$emit('submit', this.form);
       this.$modals.close('EditStepModal');
+    },
+    openCreateModuleModal() {
+      this.$modals.open('EditModuleModal', {
+        props: {
+          databaseModule: {
+            content: this.form,
+            type: 'itinerary-step',
+          },
+          saveFromExisting: true,
+        },
+        events: {
+          submit: async (newModule) => {
+            const createdModule = await this.modulesStore.create({
+              ...newModule,
+              title: newModule.content.title,
+              tag_ids: newModule.tags?.map(tag => tag.id),
+            });
+            Notify.create({
+              message: 'Module créé avec succès',
+              color: 'positive',
+            });
+            this.form.module_id = createdModule.id;
+            this.$emit('submit', this.form);
+          },
+        }
+      });
     },
   },
 }

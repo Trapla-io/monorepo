@@ -3,21 +3,20 @@
     :title="title"
     hideClose
   >
-    <div>
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Titre</p>
-      <BInput
-        v-model="form.title"
-      />
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Contenu</p>
-      <BInput
-        v-model="form.content"
-        type="textarea"
-      />
-    </div>
+    <CheckListItemForm
+      v-model="form"
+    />
     <QCardActions
         align="right"
         class="q-mt-xl q-pr-none"
     >
+      <QBtn
+        label="Sauvegarder comme module"
+        icon-right="eva-save-outline"
+        color="purple-8"
+        outline
+        @click="openCreateModuleModal"
+      />
       <BButton
         label="Appliquer"
         @click="submit"
@@ -26,12 +25,15 @@
   </BModal>
 </template>
 <script>
-import BInput from 'src/components/base/BInput.vue';
+import { mapStores } from 'pinia';
+import { Notify } from 'quasar';
 import BModal from 'src/components/base/BModal.vue';
+import CheckListItemForm from 'src/components/forms/CheckListItemForm.vue';
+import { useModulesStore } from 'src/stores/modules.store';
 
 export default {
   name: 'EditCheckListItemModal',
-  components: { BModal, BInput },
+  components: { BModal, CheckListItemForm },
   props: {
     title: {
       type: String,
@@ -47,6 +49,9 @@ export default {
       form: {},
     };
   },
+  computed: {
+    ...mapStores(useModulesStore)
+  },
   mounted() {
     this.form = {...this.information};
   },
@@ -54,6 +59,32 @@ export default {
     submit() {
       this.$emit('submit', this.form);
       this.$modals.close('EditCheckListItemModal');
+    },
+    openCreateModuleModal() {
+      this.$modals.open('EditModuleModal', {
+        props: {
+          databaseModule: {
+            content: this.form,
+            type: 'check-list-items',
+          },
+          saveFromExisting: true,
+        },
+        events: {
+          submit: async (newModule) => {
+            const createdModule = await this.modulesStore.create({
+              ...newModule,
+              title: newModule.content.title,
+              tag_ids: newModule.tags?.map(tag => tag.id),
+            });
+            Notify.create({
+              message: 'Module créé avec succès',
+              color: 'positive',
+            });
+            this.form.module_id = createdModule.id;
+            this.$emit('submit', this.form);
+          },
+        }
+      });
     },
   },
 }

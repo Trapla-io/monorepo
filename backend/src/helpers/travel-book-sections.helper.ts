@@ -7,7 +7,7 @@ const SECTIONS = [
     cover_image: null,
     items: {
       title: '',
-      show_summary: true,
+      list: true,
     },
   },
   {
@@ -17,7 +17,7 @@ const SECTIONS = [
     title: 'Infos utiles',
     cover_image: null,
     items: {
-      informations: [],
+      list: [],
     },
   },
   {
@@ -27,7 +27,7 @@ const SECTIONS = [
     title: 'Check-list',
     cover_image: null,
     items: {
-      check_list: [],
+      list: [],
     },
   },
   {
@@ -37,7 +37,7 @@ const SECTIONS = [
     title: 'Itinéraire',
     cover_image: null,
     items: {
-      steps: [],
+      list: [],
     },
   },
   {
@@ -47,7 +47,7 @@ const SECTIONS = [
     title: 'Hébergements',
     cover_image: null,
     items: {
-      accommodations: [],
+      list: [],
     },
   },
   {
@@ -69,7 +69,7 @@ const SECTIONS = [
     title: 'Transports',
     cover_image: null,
     items: {
-      routes: [],
+      list: [],
     },
   },
   {

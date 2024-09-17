@@ -16,6 +16,7 @@
         stack-label
         use-chips
         outlined
+        rounded
       />
     </div>
 
@@ -144,7 +145,6 @@ export default {
   },
   methods: {
     getCustomerLabel(item) {
-      console.log(item);
       let customer = item.id ? item : this.customersStore.customers.find(c => c.id == item);
       return `${customer.first_name} ${customer.last_name} - ${customer.email}`;
     },

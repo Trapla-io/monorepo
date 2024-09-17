@@ -9,6 +9,8 @@ import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { CustomersModule } from './customers/customers.module';
 import { ImagesModule } from './images/images.module';
+import { TagsModule } from './tags/tags.module';
+import { DatabaseModulesModule } from './database_modules/database_modules.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { ImagesModule } from './images/images.module';
     PrismaModule,
     CustomersModule,
     ImagesModule,
+    TagsModule,
+    DatabaseModulesModule,
   ],
   providers: [PrismaService],
 })

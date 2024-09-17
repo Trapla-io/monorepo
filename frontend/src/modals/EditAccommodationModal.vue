@@ -3,49 +3,20 @@
     :title="title"
     hide-close
   >
-    <div>
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Titre</p>
-      <BInput
-        v-model="form.title"
-      />
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Description</p>
-      <QEditor
-        v-model="form.description"
-        label="Description"
-        filled
-        dense
-      />
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Prix</p>
-      <BInput
-        v-model="form.price"
-      />
-      <div class="row items-center q-mt-md">
-        <div>
-          <p class="text-subtitle1 q-ma-none text-grey-6">Date d'arrivée</p>
-          <BDatePicker
-            v-model="form.arrival_date"
-          />
-        </div>
-        <div class="q-ml-md">
-          <p class="text-subtitle1 q-ma-none text-grey-6">Date de départ</p>
-          <BDatePicker
-            v-model="form.departure_date"
-          />
-        </div>
-      </div>
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Lien</p>
-      <BInput
-        v-model="form.link"
-      />
-      <p class="text-subtitle1 q-ma-none text-grey-6 q-mt-md">Image</p>
-      <BImagePicker
-        v-model="computedImage"
-      />
-    </div>
+    <AccommodationForm
+      v-model="form"
+    />
     <QCardActions
         align="right"
         class="q-mt-xl q-pr-none"
     >
+      <QBtn
+        label="Sauvegarder comme module"
+        icon-right="eva-save-outline"
+        color="purple-8"
+        outline
+        @click="openCreateModuleModal"
+      />
       <BButton
         label="Appliquer"
         @click="submit"
@@ -55,13 +26,15 @@
 </template>
 
 <script>
-import { QEditor } from 'quasar';
-import BInput from 'src/components/base/BInput.vue';
+import { mapStores } from 'pinia';
+import { Notify } from 'quasar';
 import BModal from 'src/components/base/BModal.vue';
+import AccommodationForm from 'src/components/forms/AccommodationForm.vue';
+import { useModulesStore } from 'src/stores/modules.store';
 
 export default {
   name: 'EditAccommodationModal',
-  components: { BModal, BInput, QEditor },
+  components: { BModal, AccommodationForm },
   props: {
     title: {
       type: String,
@@ -78,14 +51,7 @@ export default {
     };
   },
   computed: {
-    computedImage: {
-      get() {
-        return this.form.image;
-      },
-      set(value) {
-        this.form.image = value;
-      },
-    },
+    ...mapStores(useModulesStore)
   },
   mounted() {
     this.form = {...this.accommodation};
@@ -94,6 +60,32 @@ export default {
     submit() {
       this.$emit('submit', this.form);
       this.$modals.close('EditAccommodationModal');
+    },
+    openCreateModuleModal() {
+      this.$modals.open('EditModuleModal', {
+        props: {
+          databaseModule: {
+            content: this.form,
+            type: 'accommodation',
+          },
+          saveFromExisting: true,
+        },
+        events: {
+          submit: async (newModule) => {
+            const createdModule = await this.modulesStore.create({
+              ...newModule,
+              title: newModule.content.title,
+              tag_ids: newModule.tags?.map(tag => tag.id),
+            });
+            Notify.create({
+              message: 'Module créé avec succès',
+              color: 'positive',
+            });
+            this.form.module_id = createdModule.id;
+            this.$emit('submit', this.form);
+          },
+        }
+      });
     },
   },
 }
