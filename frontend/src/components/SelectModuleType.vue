@@ -7,6 +7,7 @@
     dense
     bg-color="white"
     rounded
+    :clearable="nullOption"
   />
 </template>
 
@@ -19,7 +20,11 @@ export default {
     modelValue: {
       type: String,
       default: null,
-    }
+    },
+    nullOption: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -32,12 +37,15 @@ export default {
     }
   },
   computed: {
+    computedTypes() {
+      return this.nullOption ? [null, ...this.types] : this.types;
+    },
     selectedType: {
       get() {
         return DATABASE_MODULES_INFORMATION.find(databaseModule => databaseModule.name === this.modelValue)?.label;
       },
       set(value) {
-        this.$emit('update:modelValue', value.value);
+        this.$emit('update:modelValue', value?.value);
       }
     }
   },

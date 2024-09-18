@@ -1,10 +1,22 @@
 <template>
   <QPage>
-    <div class="row justify-between items-start">
-      <h4 class="q-mb-xl">Base de donnée</h4>
+    <div class="row justify-between items-start q-mb-xl">
+      <h4>Base de donnée</h4>
       <BButton
         label="Ajouter un module"
         @click="openCreateModuleModal"
+      />
+    </div>
+
+    <div class="row q-mb-md q-gutter-md">
+      <SelectModuleType
+        class="col-2"
+        v-model="filters.type"
+        null-option
+      />
+      <SelectModuleTags
+        class="col-3"
+        v-model="filters.tags"
       />
     </div>
 
@@ -42,15 +54,24 @@
 <script>
 import { mapStores } from 'pinia';
 import { date, Notify } from 'quasar';
+import SelectModuleTags from 'src/components/SelectModuleTags.vue';
+import SelectModuleType from 'src/components/SelectModuleType.vue';
 import { DATABASE_MODULES_INFORMATION } from 'src/helpers/databaseModules';
 import { useModulesStore } from 'src/stores/modules.store';
 
 export default {
   name: 'DatabaseIndex',
+  components: {
+    SelectModuleTags,
+    SelectModuleType
+  },
   data() {
     return {
+      filters: {
+        type: null,
+        tags: [],
+      },
       loading: false,
-      query: '',
       columns: [
         {
           name: 'title',
@@ -86,7 +107,11 @@ export default {
   computed: {
     ...mapStores(useModulesStore),
     fileteredModules() {
-      return this.modulesStore.modules;
+      return this.modulesStore.modules.filter(databaseModule => {
+        const matchesType = this.filters.type ? databaseModule.type === this.filters.type : true;
+        const matchesTags = this.filters.tags.length ? this.filters.tags.every(tag => databaseModule.tags.find(t => t.id === tag.id)) : true;
+        return matchesType && matchesTags;
+      });
     }
   },
   mounted() {

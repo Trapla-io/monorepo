@@ -70,7 +70,7 @@ const SECTIONS_TEMPLATES = [
   },
   {
     tag: "transports",
-    icon: "flight",
+    icon: "train",
     label: "Transports",
     title: "Transports",
     cover_image: null,
