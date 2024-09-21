@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import { TravelBookWithCustomerAndSections } from 'src/prisma/types/travel-books.types';
 
 export abstract class AbstractTemplateFormatter {
@@ -14,6 +15,10 @@ export abstract class AbstractTemplateFormatter {
       ...item,
       pageBreak: array.length - 1 === index ? 'always' : 'auto',
     }));
+  }
+
+  protected formatDate(date, format = 'DD/MM/YYYY') {
+    return date ? moment(date).format(format) : null;
   }
 
   protected abstract formatCover(cover);

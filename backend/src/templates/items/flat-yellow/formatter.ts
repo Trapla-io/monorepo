@@ -1,6 +1,5 @@
 import { TravelBookWithCustomerAndSections } from 'src/prisma/types/travel-books.types';
 import { AbstractTemplateFormatter } from 'src/templates/builder/abstract.template-formatter';
-import * as moment from 'moment';
 
 export class FlatYellowFormatter extends AbstractTemplateFormatter {
   constructor(travelBook: TravelBookWithCustomerAndSections) {
@@ -21,8 +20,8 @@ export class FlatYellowFormatter extends AbstractTemplateFormatter {
     return {
       data: {
         customerName: this.getCustomerName(),
-        startDate: moment(this.travelBook.start_date).format('DD/MM/YYYY'),
-        endDate: moment(this.travelBook.end_date).format('DD/MM/YYYY'),
+        startDate: this.formatDate(this.travelBook.start_date),
+        endDate: this.formatDate(this.travelBook.end_date),
         summary: this.travelBook.sections
           .filter((section: any) => section.tag !== 'cover')
           .map((section: any, index) => ({
@@ -42,8 +41,8 @@ export class FlatYellowFormatter extends AbstractTemplateFormatter {
         coverTitle: this.coverTitle,
         routes: routes.map((route) => ({
           ...route,
-          departure_date: moment(route.departure_date).format('DD/MM/YYYY'),
-          arrival_date: moment(route.arrival_date).format('DD/MM/YYYY'),
+          departure_date: this.formatDate(route.departure_date),
+          arrival_date: this.formatDate(route.arrival_date),
         })),
         ...transports,
       },
@@ -103,8 +102,8 @@ export class FlatYellowFormatter extends AbstractTemplateFormatter {
         coverTitle: this.coverTitle,
         accommodations: formattedAccommodations.map((accommodation) => ({
           ...accommodation,
-          arrival_date: moment(accommodation.arrival_date).format('DD/MM/YYYY'),
-          departure_date: moment(accommodation.departure_date).format('DD/MM/YYYY'),
+          arrival_date: this.formatDate(accommodation.arrival_date),
+          departure_date: this.formatDate(accommodation.departure_date),
         })),
         ...accommodations,
       },
