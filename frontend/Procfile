@@ -1,1 +1,1 @@
-web: npx http-server -c-1 build
+web: npm run start
